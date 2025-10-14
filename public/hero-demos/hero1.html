@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Winter Jacket Banner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .banner-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        min-height: 600px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      }
+
+      .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+
+      .slide.active {
+        opacity: 1;
+      }
+
+      .slide.active .badge-new {
+        animation: rotateInBounce 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s
+          both;
+      }
+
+      .slide.active .main-title {
+        animation: splitReveal 1.2s ease-out 0.4s both;
+      }
+
+      .slide.active .vertical-catalog {
+        animation: slideInVertical 1s ease-out 0.6s both;
+      }
+
+      .slide.active .model-image {
+        animation: zoomRotateIn 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s
+          both;
+      }
+
+      .slide.active .info-text {
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+      }
+
+      .slide.active .offer-badge {
+        animation: bounceInScale 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s
+          both;
+      }
+
+      .slide.active .social-handle {
+        animation: fadeIn 0.8s ease-out 1.2s both;
+      }
+
+      /* Layout */
+      .slide-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      /* Left Section */
+      .left-section {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+      }
+
+      .badge-new {
+        width: fit-content;
+        background: white;
+        color: #1a1a1a;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 5px;
+        box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+      }
+
+      .main-title {
+        font-size: clamp(50px, 8vw, 100px);
+        font-weight: 900;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        line-height: 0.9;
+        text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5),
+          6px 6px 30px rgba(255, 255, 255, 0.2);
+      }
+
+      .title-highlight {
+        color: #ffd700;
+        text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5),
+          6px 6px 30px rgba(255, 215, 0, 0.4);
+      }
+
+      .vertical-catalog {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-size: clamp(40px, 6vw, 80px);
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.1);
+        letter-spacing: -3px;
+        text-transform: uppercase;
+        position: absolute;
+        right: -30px;
+        top: 50%;
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      .info-text {
+        color: #ccc;
+        font-size: clamp(14px, 2vw, 16px);
+        line-height: 1.6;
+        max-width: 400px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      .offer-badge {
+        background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+        color: #1a1a1a;
+        padding: 20px 40px;
+        font-size: clamp(20px, 3vw, 28px);
+        font-weight: 900;
+        text-transform: uppercase;
+        border-radius: 10px;
+        width: fit-content;
+        box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+        letter-spacing: 2px;
+      }
+
+      .social-handle {
+        color: #888;
+        font-size: 14px;
+        font-weight: 600;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Right Section */
+      .right-section {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .model-image {
+        width: 100%;
+        max-width: 400px;
+        height: 550px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        position: relative;
+        transition: transform 0.3s ease;
+      }
+
+      .model-image:hover {
+        transform: scale(1.05) rotate(2deg);
+      }
+
+      .model-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Navigation */
+      .nav-dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid white;
+      }
+
+      .dot:hover {
+        transform: scale(1.3);
+      }
+
+      .dot.active {
+        background: #ffd700;
+        border-color: #ffd700;
+        width: 35px;
+        border-radius: 10px;
+      }
+
+      .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        color: white;
+        font-size: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .nav-arrow:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-50%) scale(1.2);
+      }
+
+      .nav-arrow.prev {
+        left: 20px;
+      }
+      .nav-arrow.next {
+        right: 20px;
+      }
+
+      /* Animations */
+      @keyframes rotateInBounce {
+        0% {
+          opacity: 0;
+          transform: rotate(-180deg) scale(0);
+        }
+        70% {
+          transform: rotate(10deg) scale(1.1);
+        }
+        100% {
+          opacity: 1;
+          transform: rotate(0deg) scale(1);
+        }
+      }
+
+      @keyframes splitReveal {
+        0% {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+        50% {
+          transform: scaleX(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+
+      @keyframes slideInVertical {
+        0% {
+          opacity: 0;
+          transform: translateY(-50%) rotate(180deg) translateY(-100px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(-50%) rotate(180deg) translateY(0);
+        }
+      }
+
+      @keyframes zoomRotateIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3) rotate(-20deg);
+        }
+        70% {
+          transform: scale(1.05) rotate(5deg);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+        70% {
+          transform: scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 968px) {
+        .slide-content {
+          grid-template-columns: 1fr;
+          padding: 60px 30px 120px;
+          gap: 40px;
+        }
+
+        .left-section {
+          text-align: center;
+          align-items: center;
+        }
+
+        .vertical-catalog {
+          display: none;
+        }
+
+        .model-image {
+          max-width: 350px;
+          height: 450px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .model-image {
+          max-width: 300px;
+          height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner-container">
+      <!-- Slide 1 -->
+      <div class="slide active">
+        <div class="slide-content">
+          <div class="left-section">
+            <div class="badge-new">NEW ARRIVAL</div>
+            <h1 class="main-title">
+              New
+              <span class="title-highlight">ARRIVAL</span>
+            </h1>
+            <p class="vertical-catalog">Power</p>
+            <p class="info-text">
+              Discover the latest models with advanced features<br />Available
+              now at our showroom and online
+            </p>
+            <div class="offer-badge">EXCLUSIVE DEAL</div>
+            <p class="social-handle">@autoworld</p>
+          </div>
+
+          <div class="right-section">
+            <div class="model-image">
+              <img
+                src="https://images.unsplash.com/photo-1516298252535-cf2ac5147f9b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BvcnQlMjBjYXJ8ZW58MHx8MHx8fDA%3D"
+                alt="New Car Model"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide">
+        <div class="slide-content">
+          <div class="left-section">
+            <div class="badge-new">FEATURED</div>
+            <h1 class="main-title">
+              LUXURY<br />
+              <span class="title-highlight">EDITION</span>
+            </h1>
+            <p class="vertical-catalog">LUXURY</p>
+            <p class="info-text">
+              Experience comfort and power with our premium SUVs<br />Designed
+              for performance and style
+            </p>
+            <div class="offer-badge">LIMITED TIME OFFER</div>
+            <p class="social-handle">@autoworld</p>
+          </div>
+
+          <div class="right-section">
+            <div class="model-image">
+              <img
+                src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg"
+                alt="Luxury SUV"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide">
+        <div class="slide-content">
+          <div class="left-section">
+            <div class="badge-new">SPORTS EDITION</div>
+            <h1 class="main-title">
+              SPORTS<br />
+              <span class="title-highlight">EDITION</span>
+            </h1>
+            <p class="vertical-catalog">SPORTS EDITION</p>
+            <p class="info-text">
+              Unleash the thrill of speed with our sporty cars<br />Engineered
+              for precision and excitement
+            </p>
+            <div class="offer-badge">BOOK A TEST DRIVE</div>
+            <p class="social-handle">@autoworld</p>
+          </div>
+
+          <div class="right-section">
+            <div class="model-image">
+              <img
+                src="https://images.unsplash.com/photo-1625231334168-35067f8853ed?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BvcnQlMjBjYXJ8ZW58MHx8MHx8fDA%3D"
+                alt="Sports Car"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <button class="nav-arrow prev" onclick="changeSlide(-1)">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="nav-arrow next" onclick="changeSlide(1)">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+      <div class="nav-dots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+      </div>
+    </div>
+
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const dots = document.querySelectorAll(".dot");
+      let autoSlideInterval;
+
+      function showSlide(index) {
+        slides.forEach((slide) => slide.classList.remove("active"));
+        dots.forEach((dot) => dot.classList.remove("active"));
+
+        if (index >= slides.length) {
+          currentSlide = 0;
+        } else if (index < 0) {
+          currentSlide = slides.length - 1;
+        } else {
+          currentSlide = index;
+        }
+
+        slides[currentSlide].classList.add("active");
+        dots[currentSlide].classList.add("active");
+      }
+
+      function changeSlide(direction) {
+        showSlide(currentSlide + direction);
+        resetAutoSlide();
+      }
+
+      function goToSlide(index) {
+        showSlide(index);
+        resetAutoSlide();
+      }
+
+      function autoSlide() {
+        changeSlide(1);
+      }
+
+      function resetAutoSlide() {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(autoSlide, 5000);
+      }
+
+      autoSlideInterval = setInterval(autoSlide, 5000);
+
+      document
+        .querySelector(".banner-container")
+        .addEventListener("mouseenter", () => {
+          clearInterval(autoSlideInterval);
+        });
+
+      document
+        .querySelector(".banner-container")
+        .addEventListener("mouseleave", () => {
+          resetAutoSlide();
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Showcase - Japanese Minimalism</title>
+    <meta
+      name="description"
+      content="Minimalist, Wabi-Sabi inspired food showcase with subtle transitions."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Noto+Sans:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Wabi-Sabi / Minimalist Palette */
+      :root {
+        --charcoal: #2c2c2c;
+        --stone-gray: #e8e8e8;
+        --muted-beige: #f5f5dc;
+        --green-tea: #6b8e23;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--stone-gray); /* Light, textured background */
+        font-family: "Noto Sans", sans-serif;
+        color: var(--charcoal);
+        overflow: hidden;
+      }
+
+      /* Serif font for Titles (Elegant) */
+      .lora {
+        font-family: "Lora", serif;
+        letter-spacing: -0.02em;
+      }
+
+      .slider-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        border-left: 1px solid var(--charcoal); /* Subtle framing line */
+      }
+
+      .slider-track {
+        display: flex;
+        height: 100%;
+        transition: transform 1s ease-in-out;
+      }
+
+      .slide {
+        min-width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        padding-top: 10vh; /* Shift content up slightly */
+        overflow: hidden;
+      }
+
+      /* Asymmetrical Layout: Image on the left, text on the right */
+      .slide-image-frame {
+        position: absolute;
+        left: 5%;
+        top: 10%;
+        width: 45%;
+        height: 80%;
+        overflow: hidden;
+        z-index: 1;
+        border: 5px solid var(--muted-beige);
+        box-shadow: 10px 10px 0px rgba(44, 44, 44, 0.1); /* Subtle, natural shadow */
+        transition: all 1s ease;
+      }
+
+      .slide-image-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%); /* Start desaturated */
+        transition: filter 1s ease, transform 1.5s ease;
+      }
+
+      .slide.active .slide-image-frame img {
+        filter: grayscale(0%); /* Full color on active slide */
+        transform: scale(1.05);
+      }
+
+      .content-wrapper {
+        position: relative;
+        z-index: 2;
+        width: 45%;
+        margin-left: 50%; /* Pushes content to the right side */
+        padding: 3rem;
+        opacity: 0;
+        transform: translateX(50px);
+        transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+      }
+
+      .slide.active .content-wrapper {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* Text Styling */
+      .content-title {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--charcoal);
+        line-height: 1.1;
+        border-bottom: 2px solid var(--green-tea);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+      }
+
+      .chef {
+        display: block;
+        font-size: 1rem;
+        color: var(--green-tea);
+        margin-bottom: 2rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .description {
+        font-size: 1.1rem;
+        color: var(--charcoal);
+        margin-bottom: 2.5rem;
+        max-width: 450px;
+      }
+
+      /* CTA Button - Simple, elegant contrast */
+      .cta-btn {
+        padding: 0.8rem 2rem;
+        background: var(--charcoal);
+        border: 1px solid var(--charcoal);
+        color: var(--stone-gray);
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+
+      .cta-btn:hover {
+        background: var(--green-tea);
+        border-color: var(--green-tea);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Dots: Thin, horizontal lines */
+      .indicator {
+        position: absolute;
+        top: 5vh;
+        left: 5%;
+        transform: translateX(0);
+        display: flex;
+        gap: 2rem;
+        z-index: 10;
+      }
+
+      .dot {
+        width: 60px;
+        height: 2px;
+        background: rgba(44, 44, 44, 0.3);
+        cursor: pointer;
+        transition: all 0.5s ease;
+        position: relative;
+      }
+
+      .dot.active {
+        background: var(--green-tea);
+        transform: scaleX(1.1);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 1024px) {
+        .slide {
+          padding-top: 5vh;
+          flex-direction: column;
+        }
+        .slide-image-frame {
+          position: relative;
+          width: 90%;
+          height: 40vh;
+          left: 5%;
+          margin-bottom: 1rem;
+        }
+        .content-wrapper {
+          width: 90%;
+          margin-left: 5%;
+          padding: 1rem 0;
+        }
+        .content-title {
+          font-size: 2.5rem;
+        }
+        .indicator {
+          top: 3vh;
+          left: 5%;
+          gap: 1rem;
+        }
+        .dot {
+          width: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slider-container">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide active">
+          <div class="slide-image-frame">
+            <img
+              src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=1000&q=80"
+              alt="Homestyle Pasta"
+            />
+          </div>
+          <div class="content-wrapper" style="padding-top: 117px">
+            <span class="chef">The Essence of Roma</span>
+            <h1 class="content-title lora">Pasta Fresca.</h1>
+            <p class="description">
+              A delicate balance of homemade semolina, authentic San Marzano
+              tomatoes, and simple basil. The beauty lies in the few, perfectly
+              executed components.
+            </p>
+            <div class="text-sm text-green-tea mb-4">
+              — Marco’s Signature Recipe
+            </div>
+            <a href="#" class="cta-btn">View Ingredients</a>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-image-frame">
+            <img
+              src="https://media.istockphoto.com/id/1451111530/photo/creamy-alfredo-pasta-with-chicken-mushrooms-and-parmesan-cheese-healthy-italian-food.webp?a=1&b=1&s=612x612&w=0&k=20&c=dwFhkvvm3HxtLn0ECnLahYeRieNto0LGaZfm6pDKX_I="
+              alt="Comforting Chicken Dish"
+            />
+          </div>
+          <div class="content-wrapper" style="padding-top: 117px">
+            <span class="chef">Quiet Comfort</span>
+            <h1 class="content-title lora">Winter Warmth.</h1>
+            <p class="description">
+              The creamy textures of this dish are contrasted by the sharp notes
+              of fresh-grated cheese. Simple, rustic, and deeply satisfying.
+            </p>
+            <div class="text-sm text-green-tea mb-4">
+              — Sofia’s Seasonal Plate
+            </div>
+            <a href="#" class="cta-btn">Book Experience</a>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-image-frame">
+            <img
+              src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=80"
+              alt="Vibrant Green Salad"
+            />
+          </div>
+          <div class="content-wrapper" style="padding-top: 117px">
+            <span class="chef">The Imperfect Garden</span>
+            <h1 class="content-title lora">Harvest Salad.</h1>
+            <p class="description">
+              Embracing the Wabi-Sabi philosophy, we present nature as it
+              is—unpolished vegetables, unrefined grains, and a pure olive oil
+              dressing.
+            </p>
+            <div class="text-sm text-green-tea mb-4">
+              — Elena’s Daily Offering
+            </div>
+            <a href="#" class="cta-btn">Request Delivery</a>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-image-frame">
+            <img
+              src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=80"
+              alt="Rich Chocolate Cake"
+            />
+          </div>
+          <div class="content-wrapper" style="padding-top: 117px">
+            <span class="chef">Subtle Sweetness</span>
+            <h1 class="content-title lora">Kintsugi Cake.</h1>
+            <p class="description">
+              Inspired by the art of repairing broken pottery with gold, this
+              dessert is a celebration of its cracked surface and rich, molten
+              core.
+            </p>
+            <div class="text-sm text-green-tea mb-4">
+              — Isabella’s Final Course
+            </div>
+            <a href="#" class="cta-btn">Explore Menu</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="indicator fixed">
+        <div class="dot active" data-slide="0"></div>
+        <div class="dot" data-slide="1"></div>
+        <div class="dot" data-slide="2"></div>
+        <div class="dot" data-slide="3"></div>
+      </div>
+    </div>
+
+    <script>
+      class MinimalistSlider {
+        constructor() {
+          this.currentSlide = 0;
+          this.slides = document.querySelectorAll(".slide");
+          this.totalSlides = this.slides.length;
+          this.track = document.getElementById("sliderTrack");
+          this.dots = document.querySelectorAll(".dot");
+          this.delay = 6000;
+          this.interval = null;
+
+          this.slides[0].classList.add("active");
+
+          this.init();
+        }
+
+        init() {
+          this.startAutoplay();
+          this.setupDots();
+        }
+
+        goToSlide(index) {
+          this.currentSlide = index;
+          this.updateSlider();
+        }
+
+        nextSlide() {
+          this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+          this.updateSlider();
+        }
+
+        updateSlider() {
+          this.track.style.transform = `translateX(-${
+            this.currentSlide * 100
+          }%)`;
+
+          // Toggle active class and ensure all images reset/re-animate
+          this.slides.forEach((s, i) => {
+            const isActive = i === this.currentSlide;
+            s.classList.toggle("active", isActive);
+
+            // Force re-animation on the next slide for a fresh color pop effect
+            if (isActive) {
+              const img = s.querySelector("img");
+              if (img) {
+                img.style.filter = "grayscale(100%)"; // Reset filter
+                void img.offsetWidth; // Trigger reflow
+                img.style.filter = ""; // Apply transition to color filter
+              }
+            }
+          });
+
+          this.dots.forEach((d, i) =>
+            d.classList.toggle("active", i === this.currentSlide)
+          );
+        }
+
+        startAutoplay() {
+          this.interval = setInterval(() => this.nextSlide(), this.delay);
+        }
+
+        setupDots() {
+          this.dots.forEach((dot, i) => {
+            dot.addEventListener("click", () => {
+              this.goToSlide(i);
+              clearInterval(this.interval);
+              this.startAutoplay();
+            });
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        new MinimalistSlider();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hotels - Premium Villa Stays & Spa Retreats</title>
+    <meta name="description" content="Experience luxury hotel accommodations with our premium villa stays and world-class spa retreats. Book now and save up to 45% on your next getaway.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS Variables */
+        :root {
+            --luxury-navy: 210, 100%, 12%;
+            --luxury-gold: 45, 100%, 65%;
+            --luxury-cream: 45, 100%, 95%;
+            --luxury-navy-light: 210, 100%, 20%;
+        }
+
+        /* Custom styles */
+        .luxury-navy { background-color: hsl(var(--luxury-navy)); }
+        .text-luxury-cream { color: hsl(var(--luxury-cream)); }
+        .text-luxury-gold { color: hsl(var(--luxury-gold)); }
+        .bg-luxury-navy { background-color: hsl(var(--luxury-navy)); }
+        .border-luxury-gold { border-color: hsl(var(--luxury-gold)); }
+        .bg-luxury-gold { background-color: hsl(var(--luxury-gold)); }
+
+        /* Floating particles animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .floating-particle {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-particle:nth-child(2) { animation-delay: -2s; }
+        .floating-particle:nth-child(3) { animation-delay: -4s; }
+        .floating-particle:nth-child(4) { animation-delay: -1s; }
+
+        /* Animation classes */
+        .slide-transition {
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .fade-transition {
+            transition: all 0.8s ease-out;
+        }
+
+        .scale-transition {
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+
+        .animating {
+            opacity: 0;
+            transform: translateY(2rem);
+        }
+
+        .not-animating {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bg-scale-normal {
+            transform: scale(1);
+            opacity: 0.8;
+        }
+
+        .bg-scale-zoom {
+            transform: scale(1.1);
+            opacity: 0.7;
+        }
+
+        /* Button hover effects */
+        .luxury-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .luxury-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Custom grid for alternating layouts */
+        .text-left-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .text-right-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            direction: rtl;
+        }
+
+        .text-right-layout > * {
+            direction: ltr;
+        }
+
+        @media (max-width: 1024px) {
+            .text-left-layout,
+            .text-right-layout {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-luxury-navy overflow-hidden">
+    <div id="slider" class="relative w-full h-screen overflow-hidden bg-luxury-navy">
+        <!-- Background Image Container -->
+        <div class="absolute inset-0">
+            <div id="bg-image" class="absolute inset-0 bg-cover bg-center scale-transition bg-scale-normal" style="background-image: url('/public/assets/slide-1.jpg');"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
+            
+            <!-- Floating particles effect -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-yellow-400/30 rounded-full floating-particle"></div>
+                <div class="absolute top-1/3 right-1/3 w-1 h-1 bg-white/40 rounded-full floating-particle"></div>
+                <div class="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 bg-yellow-400/40 rounded-full floating-particle"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-1 h-1 bg-white/30 rounded-full floating-particle"></div>
+            </div>
+        </div>
+
+        <!-- Content Container -->
+        <div class="relative z-10 h-full flex items-center">
+            <div class="container mx-auto px-8 lg:px-16 max-w-6xl">
+                <div id="content-grid" class="text-left-layout">
+                    <!-- Text Content -->
+                    <div id="text-content" class="space-y-8 text-left fade-transition not-animating">
+                        <!-- Brand -->
+                        <div class="text-luxury-cream opacity-80 text-sm font-medium tracking-widest uppercase">
+                            Salford & Co.
+                        </div>
+
+                        <!-- Main Title -->
+                        <div class="space-y-2">
+                            <h1 id="main-title" class="text-6xl lg:text-8xl font-bold text-white leading-none">
+                                LUXURY
+                            </h1>
+                            <h2 id="subtitle" class="text-3xl lg:text-4xl font-light text-luxury-cream tracking-wide">
+                                VILLA STAYS
+                            </h2>
+                        </div>
+
+                        <!-- Discount Box -->
+                        <div class="inline-block">
+                            <div class="relative bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 text-center overflow-hidden group hover:bg-white/15 transition-all duration-300">
+                                <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div class="relative z-10">
+                                    <div class="text-luxury-cream opacity-70 text-sm font-medium mb-1">GET</div>
+                                    <div id="discount" class="text-5xl font-bold text-white">45%</div>
+                                    <div class="text-luxury-cream opacity-70 text-sm font-medium">OFF</div>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400/30 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p id="description" class="text-luxury-cream opacity-90 text-lg leading-relaxed max-w-md">
+                            Reserve hotels, resorts, or villas online quickly for a seamless holiday and travel experience
+                        </p>
+
+                        <!-- CTA Button -->
+                        <button id="cta-button" class="relative luxury-button text-white font-semibold tracking-wide px-8 py-6 text-base rounded-md group overflow-hidden">
+                            <span class="relative z-10">BOOK NOW</span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                            <div class="absolute top-0 left-0 w-full h-0.5 bg-yellow-400/50 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        </button>
+
+                        <!-- Contact Info -->
+                        <div class="pt-8 space-y-1 text-luxury-cream opacity-60 text-sm">
+                            <div>+123 456 7890</div>
+                            <div>www.luxuryresorts.com</div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Element (Empty space for balance) -->
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+            <div id="indicator-0" class="w-12 h-1 rounded-full transition-all duration-500 bg-luxury-gold"></div>
+            <div id="indicator-1" class="w-12 h-1 rounded-full transition-all duration-500 bg-white/30"></div>
+        </div>
+
+        <!-- Enhanced Decorative Elements -->
+        <div class="absolute top-1/4 right-8 w-24 h-24 border border-white/20 rounded-full opacity-30 animate-pulse"></div>
+        <div class="absolute bottom-1/4 left-8 w-16 h-16 border border-yellow-400/40 rounded-full opacity-50 animate-pulse" style="animation-delay: 1s;"></div>
+        
+        <!-- Additional floating elements -->
+        <div class="absolute top-1/2 right-1/4 w-8 h-8 border-2 border-white/10 rounded-full animate-spin" style="animation-duration: 8s;"></div>
+        <div class="absolute bottom-1/3 right-1/3 w-12 h-12 border border-yellow-400/20 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+    </div>
+
+    <script>
+        // Slide data
+        const slides = [
+            {
+                id: 1,
+                title: "LUXURY",
+                subtitle: "VILLA STAYS",
+                description: "Reserve hotels, resorts, or villas online quickly for a seamless holiday and travel experience",
+                discount: 45,
+                buttonText: "BOOK NOW",
+                backgroundImage: "https://images.unsplash.com/photo-1647522891418-6fc021378011?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHJlYWxzdGF0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+                textPosition: 'left'
+            },
+            {
+                id: 2,
+                title: "PREMIUM",
+                subtitle: "SPA RETREAT",
+                description: "Indulge in world-class wellness facilities and rejuvenating treatments in our luxury spa resort",
+                discount: 35,
+                buttonText: "RESERVE NOW",
+                backgroundImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cmVhbHN0YXRlfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+                textPosition: 'right'
+            }
+        ];
+
+        let currentSlide = 0;
+        let isAnimating = false;
+        let animatedDiscount = 0;
+        let animationFrame;
+
+        // DOM elements
+        const bgImage = document.getElementById('bg-image');
+        const textContent = document.getElementById('text-content');
+        const contentGrid = document.getElementById('content-grid');
+        const mainTitle = document.getElementById('main-title');
+        const subtitle = document.getElementById('subtitle');
+        const description = document.getElementById('description');
+        const discount = document.getElementById('discount');
+        const ctaButton = document.getElementById('cta-button');
+        const indicator0 = document.getElementById('indicator-0');
+        const indicator1 = document.getElementById('indicator-1');
+
+        // Counter animation function
+        function animateCounter(targetValue) {
+            const startTime = Date.now();
+            const duration = 1500;
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                
+                animatedDiscount = Math.floor(targetValue * easeOutCubic);
+                discount.textContent = animatedDiscount + '%';
+                
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
+        function updateSlide() {
+            const current = slides[currentSlide];
+            
+            // Start animation
+            isAnimating = true;
+            textContent.classList.add('animating');
+            textContent.classList.remove('not-animating');
+            bgImage.classList.add('bg-scale-zoom');
+            bgImage.classList.remove('bg-scale-normal');
+
+            setTimeout(() => {
+                // Update content
+                mainTitle.textContent = current.title;
+                subtitle.textContent = current.subtitle;
+                description.textContent = current.description;
+                animateCounter(current.discount);
+                ctaButton.textContent = current.buttonText;
+                bgImage.style.backgroundImage = `url('${current.backgroundImage}')`;
+
+                // Update layout based on text position
+                if (current.textPosition === 'right') {
+                    contentGrid.className = 'text-right-layout';
+                    textContent.classList.add('text-right');
+                    textContent.classList.remove('text-left');
+                } else {
+                    contentGrid.className = 'text-left-layout';
+                    textContent.classList.add('text-left');
+                    textContent.classList.remove('text-right');
+                }
+
+                // Update indicators
+                indicator0.className = currentSlide === 0 
+                    ? 'w-12 h-1 rounded-full transition-all duration-500 bg-luxury-gold' 
+                    : 'w-12 h-1 rounded-full transition-all duration-500 bg-white/30';
+                
+                indicator1.className = currentSlide === 1 
+                    ? 'w-12 h-1 rounded-full transition-all duration-500 bg-luxury-gold' 
+                    : 'w-12 h-1 rounded-full transition-all duration-500 bg-white/30';
+
+                // End animation
+                setTimeout(() => {
+                    textContent.classList.remove('animating');
+                    textContent.classList.add('not-animating');
+                    bgImage.classList.remove('bg-scale-zoom');
+                    bgImage.classList.add('bg-scale-normal');
+                    isAnimating = false;
+                }, 100);
+            }, 500);
+        }
+
+        function nextSlide() {
+            if (!isAnimating) {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlide();
+            }
+        }
+
+        // Auto-advance slides every 4 seconds
+        setInterval(nextSlide, 4000);
+
+        // Initialize first slide
+        updateSlide();
+        
+        // Initialize first slide counter
+        animateCounter(slides[0].discount);
+    </script>
+</body>
+</html>

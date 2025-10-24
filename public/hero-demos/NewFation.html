@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Sale Banner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background: linear-gradient(135deg, #E8D5C4 0%, #D4B5A0 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide.active .product-frame {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .slide.active .content-section {
+            animation: slideInRight 1s ease-out;
+        }
+
+        .slide.active .main-title {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .slide.active .sub-title {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .slide.active .tagline {
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .slide.active .discount-section {
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .slide.active .cta-button {
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        .slide-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #6B3E3E;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo i {
+            font-size: 24px;
+        }
+
+        .social-handle {
+            color: #6B3E3E;
+            font-size: 14px;
+        }
+
+        /* Decorative Elements */
+        .deco-circle {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #6B3E3E;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .deco-dots {
+            position: absolute;
+            display: grid;
+            grid-template-columns: repeat(3, 8px);
+            gap: 8px;
+        }
+
+        .deco-dots.top-left {
+            top: 150px;
+            left: 30px;
+        }
+
+        .deco-dots.bottom-right {
+            bottom: 100px;
+            right: 100px;
+        }
+
+        .deco-dots span {
+            width: 8px;
+            height: 8px;
+            background: #B8967D;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .deco-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .deco-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Product Image */
+        .product-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-frame {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 3/4;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #F5F5F5 0%, #E8E8E8 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .clothes-rack {
+            font-size: 120px;
+            color: #B8967D;
+            opacity: 0.5;
+        }
+
+        /* Content Section */
+        .content-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-size: clamp(60px, 8vw, 120px);
+            color: #6B3E3E;
+            font-weight: bold;
+            line-height: 0.9;
+            letter-spacing: 5px;
+            margin: 0;
+        }
+
+        .sub-title {
+            font-size: clamp(50px, 6vw, 90px);
+            color: #B8967D;
+            font-family: 'Brush Script MT', cursive;
+            font-weight: normal;
+            margin-top: -20px;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: #6B3E3E;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        .discount-section {
+            margin: 20px 0;
+        }
+
+        .discount-label {
+            font-size: 16px;
+            color: #6B3E3E;
+            letter-spacing: 3px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .discount-value {
+            font-size: clamp(48px, 6vw, 70px);
+            color: #6B3E3E;
+            font-weight: bold;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #6B3E3E 0%, #8B5A5A 100%);
+            color: #F5E6D3;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: fit-content;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(107, 62, 62, 0.4);
+        }
+
+        .cta-button i {
+            font-size: 20px;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(107, 62, 62, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #6B3E3E;
+            width: 35px;
+            border-radius: 10px;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            color: #6B3E3E;
+            font-size: 20px;
+        }
+
+        .nav-arrow:hover {
+            background: #6B3E3E;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.prev {
+            left: 20px;
+        }
+
+        .nav-arrow.next {
+            right: 20px;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-50%) translateX(0);
+            }
+            50% {
+                transform: translateY(-50%) translateX(20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .banner-container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .slide-content {
+                flex-direction: column;
+                padding: 80px 20px 100px;
+                gap: 30px;
+            }
+
+            .header {
+                padding: 0 20px;
+                top: 20px;
+            }
+
+            .logo {
+                font-size: 12px;
+            }
+
+            .logo i {
+                font-size: 20px;
+            }
+
+            .social-handle {
+                font-size: 12px;
+            }
+
+            .deco-circle {
+                width: 120px;
+                height: 120px;
+                left: -30px;
+            }
+
+            .deco-dots.bottom-right {
+                bottom: 80px;
+                right: 20px;
+            }
+
+            .product-frame {
+                max-width: 300px;
+            }
+
+            .content-section {
+                text-align: center;
+                align-items: center;
+            }
+
+            .main-title {
+                font-size: 60px;
+            }
+
+            .sub-title {
+                font-size: 50px;
+            }
+
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .nav-arrow.prev {
+                left: 10px;
+            }
+
+            .nav-arrow.next {
+                right: 10px;
+            }
+
+            .nav-dots {
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-gem"></i>
+                    <span>FASHION LOGO</span>
+                </div>
+                <div class="social-handle">@reallygreatsite</div>
+            </div>
+
+            <div class="deco-circle"></div>
+            
+            <div class="deco-dots top-left">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="deco-dots bottom-right">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="slide-content">
+                <div class="product-section">
+                    <div class="product-frame">
+                        <div class="product-image">
+                            <!-- <i class="fas fa-tshirt clothes-rack"></i> -->
+                             <img src="https://images.unsplash.com/photo-1620625515032-6ed0c1790c75?auto=format&fit=crop&w=800&q=80" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div>
+                        <h1 class="main-title">FASHION</h1>
+                        <h2 class="sub-title">Sale</h2>
+                    </div>
+                    <p class="tagline">Don't Run Out</p>
+                    <div class="discount-section">
+                        <div class="discount-label">DISCOUNT</div>
+                        <div class="discount-value">55% OFF</div>
+                    </div>
+                    <button class="cta-button">
+                        <i class="fas fa-shopping-bag"></i>
+                        ORDER NOW
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-gem"></i>
+                    <span>FASHION LOGO</span>
+                </div>
+                <div class="social-handle">@reallygreatsite</div>
+            </div>
+
+            <div class="deco-circle"></div>
+            
+            <div class="deco-dots top-left">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="deco-dots bottom-right">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="slide-content">
+                <div class="product-section">
+                    <div class="product-frame">
+                        <div class="product-image">
+                            <!-- <i class="fas fa-hat-cowboy clothes-rack"></i> -->
+                             
+                                 <img src="https://images.unsplash.com/photo-1609709295948-17d77cb2a69b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2xvdGhzfGVufDB8fDB8fHww" alt="cloths">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div>
+                        <h1 class="main-title">SUMMER</h1>
+                        <h2 class="sub-title">Collection</h2>
+                    </div>
+                    <p class="tagline">Limited Time Offer</p>
+                    <div class="discount-section">
+                        <div class="discount-label">DISCOUNT</div>
+                        <div class="discount-value">40% OFF</div>
+                    </div>
+                    <button class="cta-button">
+                        <i class="fas fa-shopping-bag"></i>
+                        SHOP NOW
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-gem"></i>
+                    <span>FASHION LOGO</span>
+                </div>
+                <div class="social-handle">@reallygreatsite</div>
+            </div>
+
+            <div class="deco-circle"></div>
+            
+            <div class="deco-dots top-left">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="deco-dots bottom-right">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="slide-content">
+                <div class="product-section">
+                    <div class="product-frame">
+                        <div class="product-image">
+                            <!-- <i class="fas fa-shoe-prints clothes-rack"></i> -->
+                                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Zm9vdHdlYXJ8ZW58MHx8MHx8fDA%3D" alt="">
+                               
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div>
+                        <h1 class="main-title">PREMIUM</h1>
+                        <h2 class="sub-title">Footwear</h2>
+                    </div>
+                    <p class="tagline">Step Into Style</p>
+                    <div class="discount-section">
+                        <div class="discount-label">DISCOUNT</div>
+                        <div class="discount-value">30% OFF</div>
+                    </div>
+                    <button class="cta-button">
+                        <i class="fas fa-shopping-bag"></i>
+                        DISCOVER
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <button class="nav-arrow prev" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-arrow next" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="nav-dots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let autoSlideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (index >= slides.length) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = slides.length - 1;
+            } else {
+                currentSlide = index;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+            resetAutoSlide();
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            resetAutoSlide();
+        }
+
+        function autoSlide() {
+            changeSlide(1);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(autoSlide, 5000);
+        }
+
+        // Start auto-sliding
+        autoSlideInterval = setInterval(autoSlide, 5000);
+
+        // Pause on hover
+        // document.querySelector('.banner-container').addEventListener('mouseenter', () => {
+        //     clearInterval(autoSlideInterval);
+        // });
+
+        document.querySelector('.banner-container').addEventListener('mouseleave', () => {
+            resetAutoSlide();
+        });
+    </script>
+</body>
+</html>

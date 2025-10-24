@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch Real Estate Showcase</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: #111;
+        color: #eee;
+        font-family: 'Architects Daughter', cursive;
+        overflow: hidden;
+        height: 100vh;
+    }
+    .container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    
+    /* Slide Panels */
+    .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* Initial state is hidden/off-screen for GSAP to control */
+        opacity: 0; 
+        z-index: 1;
+        background: #111;
+        border: 2px dashed #666;
+        mix-blend-mode: lighten;
+        pointer-events: none; /* Allows clicks to pass through inactive slides */
+    }
+    /* The active class is now purely for JS/GSAP tracking, not styling */
+    .slide.active { z-index: 2; pointer-events: auto; } 
+
+    /* Remove keyframes and rely on GSAP for animations */
+    .slide h1, .slide p, .slide-image {
+        /* Set initial position for GSAP to animate from */
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .slide h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 5rem;
+        color: #eee;
+        text-shadow: 0 0 2px #fff, 0 0 5px #aaa;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    /* The line under the title is now controlled by GSAP, remove CSS animation */
+    .slide h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 0%; /* Start width at 0 */
+        height: 2px;
+        background: #eee;
+    }
+    .slide p {
+        font-size: 1.5rem;
+        color: #bbb;
+        max-width: 600px;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    /* Pencil Sketch Shapes - keeping the float keyframe */
+    .pencil-shape {
+        position: absolute;
+        border: 1px dashed #888;
+        opacity: 0.5;
+        animation: float 10s infinite alternate ease-in-out;
+    }
+    .shape1 { width: 80px; height: 80px; top: 10%; left: 5%; }
+    .shape2 { width: 60px; height: 60px; bottom: 15%; right: 10%; }
+    .shape3 { width: 100px; height: 50px; top: 40%; right: 20%; }
+
+    @keyframes float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(10deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Image Panels */
+    .slide-image {
+        width: 80%;
+        max-width: 700px;
+        height: 400px;
+        object-fit: cover;
+        border: 1px dashed #aaa;
+        filter: grayscale(100%) contrast(1.2);
+        margin-bottom: 2rem;
+    }
+
+    /* Navigation Hint */
+    .nav-hint {
+        position: absolute;
+        bottom: 20px;
+        font-size: 1rem;
+        color: #888;
+        text-align: center;
+        width: 100%;
+        animation: blink 1.5s infinite;
+        z-index: 10;
+    }
+    @keyframes blink {
+        0%, 50%, 100% { opacity: 1; }
+        25%, 75% { opacity: 0; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="pencil-shape shape1"></div>
+    <div class="pencil-shape shape2"></div>
+    <div class="pencil-shape shape3"></div>
+
+    <section class="slide active">
+        <h1>Sketch Estates</h1>
+        <p>Experience the art of living. Every property tells a story, drawn in shadows and light.</p>
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Luxury Apartment" class="slide-image">
+    </section>
+
+    <section class="slide">
+        <h1>Artistic Villas</h1>
+        <p>Private estates with character, elegance, and a hand-drawn aesthetic.</p>
+        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Luxury Villa" class="slide-image">
+    </section>
+    
+    <section class="slide">
+        <h1>Modern Designs</h1>
+        <p>The perfect blend of structure and freedom, where imagination meets reality.</p>
+        <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGhvdXNlfGVufDB8fDB8fHww" alt="Modern House" class="slide-image">
+    </section>
+
+    <div class="nav-hint">Click or press space →</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+    let isAnimating = false;
+
+    // 1. Function to animate the content IN
+    function animateIn(slide) {
+        // Find elements within the slide
+        const title = slide.querySelector('h1');
+        const line = slide.querySelector('h1::after');
+        const text = slide.querySelector('p');
+        const image = slide.querySelector('.slide-image');
+
+        // Reset elements to initial state (opacity 0, shifted up) before animating
+        gsap.set([title, text, image], { opacity: 0, y: 20 });
+        gsap.set(line, { width: 0 });
+        
+        // Create the timeline for the incoming slide content
+        const tl = gsap.timeline({
+            defaults: { duration: 1.2, ease: "power2.out" },
+            onComplete: () => { isAnimating = false; }
+        });
+
+        tl.to(slide, { opacity: 1, duration: 0.8, ease: "power1.inOut" }, 0)
+          .to(title, { opacity: 1, y: 0, duration: 1 }, 0.3)
+          .to(line, { width: '100%', duration: 1.5, ease: "power2.inOut" }, 0.5) // Draw the line
+          .to(text, { opacity: 1, y: 0, duration: 1.2 }, 0.6)
+          .fromTo(image, 
+            { opacity: 0, y: 50, rotation: -2, scale: 0.95 },
+            { opacity: 1, y: 0, rotation: 0, scale: 1, duration: 1.5, ease: "back.out(1.2)" }, 0.8
+          );
+    }
+    
+    // 2. Function to animate the content OUT (before switching)
+    function animateOut(slide) {
+        // Find elements within the slide
+        const title = slide.querySelector('h1');
+        const text = slide.querySelector('p');
+        const image = slide.querySelector('.slide-image');
+
+        // Animate the current slide's content out
+        gsap.to([title, text, image], { 
+            opacity: 0, 
+            y: -20, 
+            duration: 0.5, 
+            ease: "power1.in" 
+        });
+
+        // Animate the slide itself out
+        return gsap.to(slide, { 
+            opacity: 0, 
+            duration: 0.7, 
+            ease: "power1.in" 
+        });
+    }
+
+
+    // 3. Main slide switching function
+    function showSlide(newIndex){
+        if (isAnimating) return; // Prevent rapid clicking/toggling
+        isAnimating = true;
+
+        const currentSlide = slides[currentIndex];
+        const nextSlide = slides[newIndex];
+
+        // 1. Animate the current slide content out, then the slide itself
+        animateOut(currentSlide).then(() => {
+            // After the old slide is fully faded out:
+            
+            // 2. Update classes
+            currentSlide.classList.remove('active');
+            nextSlide.classList.add('active');
+            currentIndex = newIndex;
+
+            // 3. Animate the new slide content in
+            animateIn(nextSlide);
+        });
+    }
+
+    function nextSlide(){
+        const newIndex = (currentIndex + 1) % slides.length;
+        showSlide(newIndex);
+    }
+
+    // Initialize: Animate the first slide in immediately
+    animateIn(slides[currentIndex]);
+
+    // Auto rotate
+    setInterval(nextSlide, 6000);
+
+    // Click or space event listeners
+    document.addEventListener('click', nextSlide);
+    document.addEventListener('keydown', e=>{
+        if(e.key===' ' || e.key==='ArrowRight') nextSlide();
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borcelle - Galería de Arte</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Inspired by the image
+                        borcelleBrown: "#3A2A20", // Main Background
+                        borcelleOffWhite: "#F0EAD6", // Text and main card
+                        borcelleOrange: "#FF5722", // Accent
+                    },
+                    fontFamily: {
+                        display: ["'Inter'", "sans-serif"],
+                        body: ["'Roboto'", "sans-serif"]
+                    },
+                    animation: {
+                        fadeInUp: "fadeInUp 1s ease-out forwards",
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            "0%": { opacity: "0", transform: "translateY(20px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        .carousel-container {
+            background-color: #3A2A20; /* Borcelle Brown */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Base styles for the geometric shapes */
+        .geo-shape {
+            position: absolute;
+            opacity: 0; /* Hidden by default, animated by GSAP */
+            will-change: transform, opacity;
+        }
+
+        .shape-arch-left {
+            background-color: #F0EAD6; /* Off-White */
+            border-radius: 50% / 100% 100% 0 0; /* Creates an arch shape */
+            width: 300px;
+            height: 600px;
+            bottom: -50%;
+            left: 5%;
+            transform-origin: bottom center;
+            z-index: 10;
+        }
+
+        .shape-arch-right {
+            background-color: #F0EAD6; /* Off-White */
+            border-radius: 50% / 100% 100% 0 0;
+            width: 350px;
+            height: 700px;
+            bottom: -60%;
+            right: 10%;
+            transform-origin: bottom center;
+            z-index: 10;
+        }
+
+        .shape-circle-top {
+            background-color: #FF5722; /* Orange */
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            top: 5%;
+            right: 15%;
+            z-index: 15;
+            box-shadow: 0 0 20px rgba(255, 87, 34, 0.4);
+        }
+
+        .shape-dot-pattern {
+            background: radial-gradient(circle, #F0EAD6 10%, transparent 11%), 
+                        radial-gradient(circle, #F0EAD6 10%, transparent 11%);
+            background-size: 20px 20px; /* Adjust dot density */
+            background-position: 0 0, 10px 10px;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            top: 15%;
+            right: 5%;
+            z-index: 12;
+            overflow: hidden; /* Contains dots */
+        }
+
+        /* Image within the arch shape */
+        .slide-image-container {
+            position: absolute;
+            width: 80%; /* Takes up 80% of its parent shape */
+            height: 70%;
+            overflow: hidden;
+            z-index: 11; /* Above the arch, below the text */
+            filter: brightness(0.8) grayscale(0.5); /* Subtle filter */
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .slide-image-container:hover {
+            filter: brightness(1) grayscale(0);
+        }
+
+        /* Specific positioning for images within the right arch shape */
+        .right-arch-image {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 70%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Navigation Dots */
+        .dot.active {
+            background: #FF5722 !important; /* Orange */
+            transform: scale(1.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .shape-arch-left {
+                width: 200px;
+                height: 400px;
+                left: -10%;
+            }
+            .shape-arch-right {
+                width: 250px;
+                height: 500px;
+                right: -10%;
+            }
+            .shape-circle-top {
+                width: 100px;
+                height: 100px;
+                top: 2%;
+                right: 5%;
+            }
+            .shape-dot-pattern {
+                width: 120px;
+                height: 120px;
+                top: 10%;
+                right: -5%;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            .slide-title {
+                font-size: 1.5rem;
+            }
+            .slide-date {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden font-body text-borcelleOffWhite">
+    <div class="carousel-container min-h-screen flex flex-col items-center justify-center relative p-4">
+
+        <div class="absolute top-8 left-8 z-30">
+            <h1 class="font-display text-4xl md:text-5xl font-black tracking-widest text-borcelleOffWhite animate-fadeInUp">BORCELLE</h1>
+            <p class="font-body text-lg md:text-xl font-light text-borcelleOffWhite/80 mt-2 opacity-0" style="animation: fadeInUp 1s ease-out 0.5s forwards;">GALERÍA DE ARTE</p>
+        </div>
+
+        <div class="absolute bottom-8 left-8 rotate-90 origin-bottom-left z-30 opacity-0" style="animation: fadeInUp 1s ease-out 0.8s forwards;">
+            <p class="font-body text-xs uppercase tracking-widest text-borcelleOffWhite">WWW.SITIOINCREIBLE.COM</p>
+        </div>
+
+        <div class="geo-shape shape-arch-left" id="arch-left"></div>
+        <div class="geo-shape shape-arch-right" id="arch-right"></div>
+        <div class="geo-shape shape-circle-top" id="circle-top"></div>
+        <div class="geo-shape shape-dot-pattern" id="dot-pattern"></div>
+
+        <div class="relative w-full max-w-4xl mx-auto h-[600px] flex items-center justify-center z-20">
+            <div class="carousel-wrapper relative w-full h-full" id="carousel">
+
+                <div class="slide absolute inset-0 hidden flex flex-col items-center justify-center text-center p-4">
+                    <div class="right-arch-image flex items-center justify-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1681566925827-d1969127dd3d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fGxhcHRvcHxlbnwwfHwwfHx8MA%3D%3D" 
+                             class="w-full h-full object-cover rounded-lg shadow-lg" alt="Abstract Art Piece 1">
+                    </div>
+                    <div class="absolute bottom-20 md:bottom-16 text-center w-full max-w-[200px] md:max-w-[250px] bg-borcelleBrown/80 p-3 rounded-md shadow-lg opacity-0" style="animation: fadeInUp 1s ease-out 1s forwards;">
+                        <h3 class="font-display text-xl md:text-2xl font-bold text-borcelleOffWhite slide-title">"Nebula Fragment"</h3>
+                        <p class="font-body text-sm text-borcelleOffWhite/70 slide-date">ARTWORK / 2023</p>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 hidden flex flex-col items-center justify-center text-center p-4">
+                    <div class="right-arch-image flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2F0Y2h8ZW58MHx8MHx8fDA%3D" 
+                             class="w-full h-full object-cover rounded-lg shadow-lg" alt="Abstract Art Piece 2">
+                    </div>
+                    <div class="absolute bottom-20 md:bottom-16 text-center w-full max-w-[200px] md:max-w-[250px] bg-borcelleBrown/80 p-3 rounded-md shadow-lg opacity-0" style="animation: fadeInUp 1s ease-out 1s forwards;">
+                        <h3 class="font-display text-xl md:text-2xl font-bold text-borcelleOffWhite slide-title">"Geometric Harmony"</h3>
+                        <p class="font-body text-sm text-borcelleOffWhite/70 slide-date">SCULPTURE / 2024</p>
+                    </div>
+                </div>
+                
+                <div class="slide absolute inset-0 hidden flex flex-col items-center justify-center text-center p-4">
+                    <div class="right-arch-image flex items-center justify-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1679913792858-4b15512a3b99?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aGVhZCUyMHBob25lfGVufDB8fDB8fHww" 
+                             class="w-full h-full object-cover rounded-lg shadow-lg" alt="Abstract Art Piece 3">
+                    </div>
+                    <div class="absolute bottom-20 md:bottom-16 text-center w-full max-w-[200px] md:max-w-[250px] bg-borcelleBrown/80 p-3 rounded-md shadow-lg opacity-0" style="animation: fadeInUp 1s ease-out 1s forwards;">
+                        <h3 class="font-display text-xl md:text-2xl font-bold text-borcelleOffWhite slide-title">"Urban Echoes"</h3>
+                        <p class="font-body text-sm text-borcelleOffWhite/70 slide-date">PHOTOGRAPHY / 2023</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 right-8 text-right z-30 opacity-0" style="animation: fadeInUp 1s ease-out 1.2s forwards;">
+            <p class="font-body text-lg md:text-xl font-bold text-borcelleOffWhite/80">2024</p>
+            <p class="font-body text-sm uppercase tracking-wider text-borcelleOffWhite/60">EVENTOS CREATIVOS</p>
+        </div>
+
+        <div class="flex justify-center mt-6 gap-3 absolute bottom-2 left-1/2 -translate-x-1/2 z-30 p-2" id="dots">
+            <button class="dot w-3 h-3 rounded-full bg-borcelleOffWhite/40 transition active"></button>
+            <button class="dot w-3 h-3 rounded-full bg-borcelleOffWhite/40 transition"></button>
+            <button class="dot w-3 h-3 rounded-full bg-borcelleOffWhite/40 transition"></button>
+        </div>
+
+    </div>
+
+    <script>
+        class BorcelleCarousel {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.dots = document.querySelectorAll('.dot');
+                this.totalSlides = this.slides.length;
+                this.currentIndex = 0;
+                this.intervalId = null;
+                this.init();
+            }
+
+            init() {
+                this.animateShapesInitial();
+                this.updateSlideUI(false); // Initial load without slide animations
+                this.autoSlide();
+
+                this.dots.forEach((dot, i) => dot.addEventListener('click', () => this.handleUserInteraction(() => this.goToSlide(i))));
+            }
+
+            animateShapesInitial() {
+                // Initial animation for the geometric shapes
+                gsap.timeline({ defaults: { duration: 1, ease: "power2.out" } })
+                    .fromTo("#arch-left", { opacity: 0, x: -100, scaleY: 0.5 }, { opacity: 1, x: 0, scaleY: 1, duration: 1.2 }, 0.5)
+                    .fromTo("#arch-right", { opacity: 0, x: 100, scaleY: 0.5 }, { opacity: 1, x: 0, scaleY: 1, duration: 1.2 }, 0.7)
+                    .fromTo("#circle-top", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.8 }, 1)
+                    .fromTo("#dot-pattern", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.8 }, 1.2);
+
+                // Continuous subtle animation for shapes
+                gsap.to("#arch-left", { rotation: 0.5, yoyo: true, repeat: -1, duration: 8, ease: "sine.inOut" });
+                gsap.to("#arch-right", { rotation: -0.5, yoyo: true, repeat: -1, duration: 9, ease: "sine.inOut" });
+                gsap.to("#circle-top", { scale: 1.02, yoyo: true, repeat: -1, duration: 4, ease: "sine.inOut" });
+            }
+
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateSlideUI(true); // Animate slide content
+            }
+
+            updateSlideUI(animateContent) {
+                this.slides.forEach((s, i) => {
+                    s.classList.toggle("hidden", i !== this.currentIndex);
+                    if (i === this.currentIndex && animateContent) {
+                        // Reset and re-trigger slide content animation
+                        s.querySelectorAll('.slide-title, .slide-date, .absolute.bottom-20').forEach(el => {
+                            el.style.animation = 'none';
+                            el.offsetHeight; /* trigger reflow */
+                            el.style.animation = `fadeInUp 1s ease-out ${el.getAttribute('style')?.match(/delay:\s*([\d.]+)s/)?.[1] || '0'}s forwards`;
+                        });
+                    }
+                });
+                this.dots.forEach((d, i) => d.classList.toggle("active", i === this.currentIndex));
+            }
+
+            handleUserInteraction(action) {
+                clearInterval(this.intervalId);
+                action.call(this); 
+                this.autoSlide();
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
+                this.goToSlide(this.currentIndex);
+            }
+
+            autoSlide() {
+                this.intervalId = setInterval(() => {
+                    this.next();
+                }, 6000); // Auto-rotate every 6 seconds
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => new BorcelleCarousel());
+    </script>
+</body>
+</html>

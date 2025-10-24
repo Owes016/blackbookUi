@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Apartment Ad - A Modern Web Poster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-bg: #362C25;
+            --text-light: #F8F8F8;
+            --text-cream: #E0D9D4;
+            --accent-gold: #D4AF37; /* A subtle gold for highlights */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        /* Base Slider & Content Styling */
+        .slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-color: var(--primary-bg); /* Ensure solid background */
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        /* Left Section: Images */
+        .image-section {
+            position: relative;
+            flex: 1.5; /* Larger left section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem; /* Padding around the image cluster */
+            overflow: hidden; /* For images cropping nicely */
+        }
+
+        .main-building-img {
+            position: relative;
+            width: 100%;
+            height: 90%; /* Adjust height to fit within padding */
+            max-height: 800px;
+            object-fit: cover;
+            border-radius: 1rem; /* Soften edges */
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Deep shadow for depth */
+        }
+
+        .hexagon-clip {
+            -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .hexagon-clip:hover {
+            transform: scale(1.05);
+            z-index: 10; /* Bring to front on hover */
+        }
+
+        .hexagon-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            transition: background 0.3s ease;
+        }
+
+        .hexagon-clip:hover .hexagon-overlay {
+            background: rgba(0,0,0,0); /* Fade out overlay on hover */
+        }
+        
+        /* Right Section: Content */
+        .content-section {
+            flex: 1; /* Smaller right section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem 5rem; /* Ample padding */
+            position: relative;
+            z-index: 2; /* Ensure content is above images */
+        }
+
+        .brand-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--accent-gold);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 300;
+            color: var(--text-cream);
+            margin-left: 0.5rem;
+            vertical-align: top; /* Align with the top of the logo */
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem; /* Larger title */
+            line-height: 1.1;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: var(--text-cream);
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+
+        .features-list {
+            list-style: none; /* Remove default bullets */
+            padding: 0;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .features-list li {
+            position: relative;
+            padding-left: 1.8rem; /* Space for custom bullet */
+            margin-bottom: 0.7rem;
+            font-weight: 400;
+        }
+
+        .features-list li::before {
+            content: '•'; /* Custom bullet point */
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            line-height: 1;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: var(--primary-bg);
+            padding: 1.2rem 3rem;
+            border-radius: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .cta-button:hover {
+            background-color: var(--text-cream);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Text animation classes */
+        .text-animate-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide.active .text-animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide.active .text-animate-in:nth-child(1) { transition-delay: 0.3s; } /* Brand/Logo */
+        .slide.active .text-animate-in:nth-child(2) { transition-delay: 0.5s; } /* Title */
+        .slide.active .text-animate-in:nth-child(3) { transition-delay: 0.7s; } /* Tagline */
+        .slide.active .text-animate-in:nth-child(4) { transition-delay: 0.9s; } /* Features */
+        .slide.active .text-animate-in:nth-child(5) { transition-delay: 1.1s; } /* Button */
+
+
+        /* Floating animation for geometric (hexagon) images */
+        @keyframes floatY {
+            0%, 100% { translate: 0 0; }
+            50% { translate: 0 -12px; }
+        }
+        .hexagon-clip {
+            will-change: translate;
+        }
+        .float-updown-1 {
+            animation: floatY 6s ease-in-out infinite;
+        }
+        .float-updown-2 {
+            animation: floatY 8s ease-in-out infinite 0.4s;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .slide {
+                flex-direction: column;
+            }
+            .image-section {
+                flex: none;
+                height: 50vh;
+                padding: 2rem;
+            }
+            .content-section {
+                flex: none;
+                height: 50vh;
+                padding: 2rem;
+                text-align: center;
+                align-items: center;
+            }
+            .title {
+                font-size: 3rem;
+            }
+            .tagline {
+                font-size: 1rem;
+            }
+            .features-list {
+                font-size: 0.9rem;
+                text-align: left; /* Keep feature list left-aligned */
+            }
+            .features-list li {
+                margin: 0 auto 0.7rem auto; /* Center list items as a block */
+                max-width: 300px;
+            }
+            .main-building-img {
+                height: 80%;
+                width: auto; /* Allow auto width to scale with height */
+                max-width: 100%;
+            }
+            /* Adjust hexagon positions for smaller screens if needed */
+            .hexagon-1, .hexagon-2 {
+                display: none; /* Hide hexagons on smaller screens for cleaner look */
+            }
+        }
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 1.5rem;
+            }
+            .title {
+                font-size: 2.5rem;
+            }
+            .tagline {
+                font-size: 0.9rem;
+            }
+            .brand-logo {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slider-container" role="region" aria-label="Luxury Apartment Advertisement Slider">
+    <div class="slide active" id="slide-1">
+        <div class="image-section">
+            <img src="../assets/main-1.jpg" alt="Modern luxury apartment building exterior" class="main-building-img">
+            
+            <div class="absolute w-40 h-40 md:w-56 md:h-56 -top-20 left-1/4 transform -translate-x-1/2 -rotate-3 z-20 overflow-hidden hexagon-clip float-updown-1">
+                <!-- <div class="hexagon-overlay"></div>
+                <img src="img/hex-1.jpg" alt="Luxurious living room interior" class="absolute inset-0 object-cover w-full h-full"> -->
+            </div>
+            <div class="absolute w-32 h-32 md:w-48 md:h-48 bottom-10 right-1/4 transform translate-x-1/2 rotate-6 z-20 overflow-hidden hexagon-clip float-updown-2">
+                <div class="hexagon-overlay"></div>
+                <img src="../assets/hex-2.jpg" alt="Elegant dining area" class="absolute inset-0 object-cover w-full h-full">
+            </div>
+        </div>
+        <div class="content-section">
+            <!-- <div class="text-animate-in">
+                <span class="brand-logo">C<span style="font-size: 0.7em;">.</span></span><span class="brand-name">CASA</span>
+            </div> -->
+            <h1 class="title text-animate-in">LUXURY<br>APARTMENT<br>FOR SALE</h1>
+            <p class="tagline text-animate-in">Discover exceptional living spaces where urban sophistication meets unparalleled comfort.</p>
+            <ul class="features-list text-animate-in">
+                <li>State-of-the-art on-site amenities</li>
+                <li>Prime central city access</li>
+                
+            </ul>
+            <a href="#" class="cta-button text-animate-in">BOOK A VIEWING</a>
+        </div>
+    </div>
+
+    <div class="slide" id="slide-2">
+        <div class="image-section">
+            <img src="../assets/main-2.jpg" alt="Elegant apartment interior with modern furniture" class="main-building-img">
+            
+            <div class="absolute w-40 h-40 md:w-56 md:h-56 -bottom-10 left-1/4 transform -translate-x-1/2 rotate-1 z-20 overflow-hidden hexagon-clip float-updown-2">
+                <!-- <div class="hexagon-overlay"></div>
+                <img src="img/hex-3.jpg" alt="Modern bedroom interior" class="absolute inset-0 object-cover w-full h-full"> -->
+            </div>
+            <div class="absolute w-32 h-32 md:w-48 md:h-48 top-0 right-1/4 transform translate-x-1/2 -rotate-12 z-20 overflow-hidden hexagon-clip float-updown-1">
+                <div class="hexagon-overlay"></div>
+                <img src="../assets/hex-4.jpg" alt="Stylish kitchen with island" class="absolute inset-0 object-cover w-full h-full">
+            </div>
+        </div>
+        <div class="content-section">
+            <!-- <div class="text-animate-in">
+                <span class="brand-logo">C<span style="font-size: 0.7em;">.</span></span><span class="brand-name">CASA</span>
+            </div> -->
+            <h1 class="title text-animate-in">PREMIUM<br>LIVING<br>SPACES</h1>
+            <p class="tagline text-animate-in">Experience bespoke design and unparalleled amenities in the heart of the city.</p>
+            <ul class="features-list text-animate-in">
+                <li>Expansive floor plans & high ceilings</li>
+                <li>Designer kitchens & spa bathrooms</li>
+              
+            </ul>
+            <a href="#" class="cta-button text-animate-in">EXPLORE HOMES</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideInterval = 6000; // 6 seconds per slide (includes animation time)
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+            });
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Initialize the first slide
+        showSlide(currentSlide);
+
+        // Auto-rotate slides
+        setInterval(nextSlide, slideInterval);
+    });
+</script>
+
+</body>
+</html>

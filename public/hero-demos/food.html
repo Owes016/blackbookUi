@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Harvest - Brutalist Monochrome Slider</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define the Brutalism Palette and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+        
+        :root {
+            --black: #000000;
+            --white: #F0F0F0;
+            --accent: #FF6600; /* Acidic Orange */
+            --light-gray: #CCCCCC;
+        }
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.4;
+            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* For full-screen slider */
+        }
+
+        /* Large, Stark Header Font */
+        .bebas { 
+            font-family: 'Bebas Neue', sans-serif; 
+            letter-spacing: 0.15em;
+            line-height: 0.9;
+        }
+
+        /* Slider Container: Horizontal Carousel */
+        .slider-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+        }
+        .slide {
+            flex: 0 0 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            min-width: 100vw;
+            padding: 3rem 1rem;
+            border-bottom: 2px solid var(--white); /* Retain brutalist hard lines */
+            background-color: var(--black);
+        }
+
+        /* Image Filter: Desaturate base image, only color comes from the food itself */
+        .image-container {
+            border: 4px solid var(--accent); /* Accent frame */
+            filter: grayscale(10%); /* Slight grayscale tint */
+            transition: transform 0.4s ease-in-out;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        .image-container:hover,
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+        .image-container img {
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Accent Text Styling */
+        .accent-text {
+            color: var(--accent);
+            text-shadow: 2px 2px 0 var(--black);
+        }
+
+        /* Button Style: High Contrast & Hard Edges */
+        .btn-brutal {
+            background: var(--accent);
+            color: var(--black);
+            border: 2px solid var(--white);
+            padding: 0.75rem 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            box-shadow: 4px 4px 0 var(--white); /* Iconic brutalist offset shadow */
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-brutal:hover {
+            background: var(--white);
+            color: var(--accent);
+            box-shadow: 6px 6px 0 var(--accent);
+            transform: translate(-2px, -2px);
+        }
+        
+        /* Animation: Slide In From Left/Right (Adapted for Slider) */
+        @keyframes slideInL { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInR { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .animate-slide-l { animation: slideInL 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; }
+        .animate-slide-r { animation: slideInR 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; }
+
+        /* Delay Utilities */
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-8 { animation-delay: 0.8s; }
+        .delay-12 { animation-delay: 1.2s; }
+
+        /* Navigation Dots: Brutalist Style */
+        .nav-dots {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 20;
+        }
+        .nav-dot {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--white);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-dot.active {
+            background: var(--accent);
+            box-shadow: 0 0 0 2px var(--black);
+        }
+        .nav-dot:hover {
+            background: var(--white);
+            transform: scale(1.2);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1rem;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+            .bebas.text-8xl { font-size: 4rem; line-height: 0.95; }
+            .bebas.text- { font-size: 6rem; }
+            .bebas.text-6xl { font-size: 3rem; }
+            .bebas.text-5xl { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; gap: 2rem; }
+            .image-container { max-width: 100%; height: 250px; }
+            .nav-dots { bottom: 1rem; gap: 0.75rem; }
+            .nav-dot { width: 12px; height: 12px; }
+            .btn-brutal { padding: 0.5rem 1.5rem; font-size: 0.875rem; letter-spacing: 0.1em; }
+            h1 br { display: none; } /* Stack text on mobile */
+            .flex.justify-center.mt-12 { margin-top: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .slide { padding: 1.5rem 0.5rem; }
+            .bebas.text-8xl { font-size: 3rem; }
+            .bebas.text- { font-size: 4rem; }
+            .image-container { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Horizontal Slider Container -->
+    <div class="slider-container" id="slider">
+        
+        <!-- Slide 1: Hero -->
+        <section class="slide" data-slide="1">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto w-full h-full flex items-center justify-center">
+                
+                <div class="lg:p-8 flex flex-col justify-center">
+                    <p class="text-sm uppercase tracking-widest text-light-gray mb-4 animate-slide-l">GREEN HARVEST 2025 TEASER</p>
+                    <h1 class="bebas text-8xl md:text-[5rem] font-black uppercase text-white animate-slide-l delay-4">THE RAW <br><span class="accent-text">POWER</span>OF PLANT.
+                    </h1>
+                    <p class="mt-6 text-lg text-light-gray max-w-md animate-slide-l delay-8">
+                        An uncompromising commitment to pure, unprocessed ingredients. No filler. No filter. **Taste the essential.**
+                    </p>
+                    <a href="#menu" class="btn-brutal mt-8 inline-block animate-slide-l delay-12">VIEW THE MANIFESTO</a>
+                </div>
+
+                <div class="flex items-start justify-end p-4">
+                    <div class="image-container w-full max-w-md shadow-2xl h-[400px] lg:h-auto">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Lush salad bowl" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Slide 2: Menu -->
+        <section class="slide" data-slide="2">
+            <div class="max-w-7xl mx-auto w-full h-full flex flex-col items-center justify-center p-4">
+                
+                <h2 class="bebas text-3xl text-center mb-12 accent-text animate-slide-l">FEATURED PLATE: AVOCADO</h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 w-full max-w-6xl">
+                    
+                    <div class="image-container col-span-1 lg:col-span-1 h-[300px] lg:h-[400px] overflow-hidden animate-slide-l delay-4">
+                        <img src="https://images.unsplash.com/photo-1603046891726-36bfd957e0bf?w=800&auto=format&fit=crop&q=80" alt="Avocado toast close-up" class="w-full h-full object-cover object-center transition duration-500 hover:scale-110">
+                    </div>
+
+                    <div class="col-span-1 lg:col-span-1 flex flex-col justify-center text-left p-0 lg:p-4 animate-slide-r delay-8">
+                        <p class="text-xs uppercase tracking-widest text-accent mb-2">01 — ESSENTIALS</p>
+                        <h3 class="bebas text-5xl text-white">SOURDOUGH X AVOCADO</h3>
+                        <p class="mt-4 text-sm text-light-gray border-l-4 border-accent pl-4">
+                            Crushed avocado. Smoked paprika. Cold pressed olive oil. The classic, deconstructed and elevated. A stark contrast in texture, pure in flavor.
+                        </p>
+                    </div>
+                    
+                    <div class="image-container col-span-1 lg:col-span-1 h-[300px] lg:h-[400px] overflow-hidden animate-slide-r delay-4">
+                        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Garnished plate detail" class="w-full h-full object-cover object-center transition duration-500 hover:scale-110">
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-12 w-full">
+                     <a href="#" class="btn-brutal animate-slide-l delay-12">ORDER PICKUP | $12</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: CTA -->
+        <section class="slide" data-slide="3" style="min-height: 100vh;">
+            <div class="flex flex-col items-center justify-center text-center p-8 max-w-xl mx-auto w-full h-full">
+                <h2 class="bebas text-5xl text-white mb-6 animate-slide-l">
+                    REDEFINE YOUR GREEN.
+                </h2>
+                <p class="text-light-gray mb-8 animate-slide-r delay-4 max-w-md">
+                    We are more than a salad shop. We are a statement. Connect with the new movement in whole foods.
+                </p>
+                <div class="space-x-4 animate-slide-l delay-8 mb-12">
+                    <a href="#" class="btn-brutal">BOOK RESERVATION</a>
+                </div>
+                <div class="text-xs text-light-gray border-t border-b border-light-gray py-2 mt-4 animate-slide-r delay-12">
+                    GREEN HARVEST. LOCATED IN THE CITY CENTRE. OPEN 11:00 AM — 22:00 PM.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" data-slide="1"></div>
+        <div class="nav-dot" data-slide="2"></div>
+        <div class="nav-dot" data-slide="3"></div>
+    </div>
+
+    <script>
+        // Slider Functionality: Auto-advance, Manual Navigation, Touch Swipe
+        let currentSlide = 1;
+        const totalSlides = 3;
+        const slider = document.getElementById('slider');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        function nextSlide() {
+            currentSlide = (currentSlide % totalSlides) + 1;
+            slider.scrollTo({
+                left: (currentSlide - 1) * window.innerWidth,
+                behavior: 'smooth'
+            });
+            updateNavDots();
+            // Restart animations for new slide
+            const newSlide = document.querySelector(`[data-slide="${currentSlide}"]`);
+            if (newSlide) {
+                const elements = newSlide.querySelectorAll('[class*="animate-"]');
+                elements.forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight; // Trigger reflow
+                    el.style.animation = null;
+                });
+            }
+        }
+
+        function updateNavDots() {
+            navDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentSlide);
+            });
+        }
+
+        // Auto-advance every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Manual navigation with dots
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideNum = parseInt(dot.dataset.slide);
+                currentSlide = slideNum;
+                slider.scrollTo({
+                    left: (slideNum - 1) * window.innerWidth,
+                    behavior: 'smooth'
+                });
+                updateNavDots();
+                // Restart animations
+                const newSlide = document.querySelector(`[data-slide="${slideNum}"]`);
+                if (newSlide) {
+                    const elements = newSlide.querySelectorAll('[class*="animate-"]');
+                    elements.forEach(el => {
+                        el.style.animation = 'none';
+                        el.offsetHeight;
+                        el.style.animation = null;
+                    });
+                }
+            });
+        });
+
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let startY = 0;
+        slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+        slider.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) { // Horizontal swipe threshold
+                if (diffX > 0) {
+                    // Swipe left - next slide
+                    nextSlide();
+                } else {
+                    // Swipe right - previous slide
+                    currentSlide = currentSlide === 1 ? totalSlides : currentSlide - 1;
+                    slider.scrollTo({
+                        left: (currentSlide - 1) * window.innerWidth,
+                        behavior: 'smooth'
+                    });
+                    updateNavDots();
+                }
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                currentSlide = currentSlide === 1 ? totalSlides : currentSlide - 1;
+                slider.scrollTo({
+                    left: (currentSlide - 1) * window.innerWidth,
+                    behavior: 'smooth'
+                });
+                updateNavDots();
+            }
+        });
+
+        // Ensure responsiveness on resize
+        window.addEventListener('resize', () => {
+            slider.scrollTo({
+                left: (currentSlide - 1) * window.innerWidth,
+                behavior: 'smooth'
+            });
+        });
+
+        // Button interactions (prevent default for demo)
+        document.querySelectorAll('.btn-brutal').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Simulate click feedback (brutalist style: stark change)
+                btn.style.background = 'var(--white)';
+                btn.style.color = 'var(--accent)';
+                setTimeout(() => {
+                    btn.style.background = 'var(--accent)';
+                    btn.style.color = 'var(--black)';
+                }, 2000);
+            });
+        });
+    </script>
+
+</body>
+</html>

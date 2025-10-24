@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Promo - Grid BG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ===== COLORS ===== */
+:root {
+    --red: #e11d48;
+    --red-dark: #be123c;
+    --black: #0b0b0b;
+    --white: #ffffff;
+    --gray: #1f1f1f;
+}
+
+/* ===== BODY & GRID BACKGROUND ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--white);
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    background-color: #0b0b0b;
+    background-image: 
+        linear-gradient(to right, rgba(225, 29, 71, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(225,29,72,0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+}
+
+/* Grid animation */
+@keyframes gridMove {
+    0% { background-position: 0 0, 0 0; }
+    50% { background-position: 25px 25px, 25px 25px; }
+    100% { background-position: 0 0, 0 0; }
+}
+
+/* ===== FONT FAMILIES ===== */
+.serif { font-family: 'Bebas Neue', cursive; letter-spacing: 0.02em; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideInFromLeft {0%{transform:translateX(-100px);opacity:0;}100%{transform:translateX(0);opacity:1;}}
+@keyframes slideInFromRight {0%{transform:translateX(100px);opacity:0;}100%{transform:translateX(0);opacity:1;}}
+@keyframes slideInFromTop {0%{transform:translateY(-50px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+@keyframes slideInFromBottom {0%{transform:translateY(50px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+@keyframes fadeIn {0%{opacity:0;transform:scale(0.9);}100%{opacity:1;transform:scale(1);}}
+@keyframes zoomIn {0%{transform:scale(0.8);opacity:0;}100%{transform:scale(1);opacity:1;}}
+@keyframes rotateIn {0%{transform:rotate(-10deg) scale(0.8);opacity:0;}100%{transform:rotate(0deg) scale(1);opacity:1;}}
+@keyframes shimmer {0%{background-position:-200px 0;}100%{background-position:200px 0;}}
+@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+
+/* ===== ANIMATION CLASSES ===== */
+.animate-slide-left {animation: slideInFromLeft 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-slide-right {animation: slideInFromRight 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-slide-top {animation: slideInFromTop 1s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-slide-bottom {animation: slideInFromBottom 1s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-fade-in {animation: fadeIn 1.5s ease-out forwards;opacity:0;}
+.animate-zoom-in {animation: zoomIn 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-rotate-in {animation: rotateIn 1.5s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0;}
+.animate-shimmer {background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);background-size:200px 100%;animation:shimmer 2s infinite;}
+.animate-pulse-custom {animation:pulse 2s infinite;}
+
+/* ===== DELAY CLASSES ===== */
+.delay-1 {animation-delay:0.5s;} .delay-2 {animation-delay:1s;} .delay-3 {animation-delay:1.5s;} 
+.delay-4 {animation-delay:2s;} .delay-5 {animation-delay:2.5s;} .delay-6 {animation-delay:3s;} .delay-7 {animation-delay:3.5s;}
+
+/* ===== TEXT SHADOW ===== */
+.text-shadow-strong {text-shadow:0 4px 0 rgba(0,0,0,0.35);}
+.text-shadow {text-shadow:0 2px 0 rgba(0,0,0,0.28);}
+
+/* ===== CUSTOM STYLES ===== */
+.image-frame {background:white; box-shadow:0 20px 40px rgba(0,0,0,0.1); border-radius:8px; overflow:hidden; border:4px solid var(--white); box-shadow:0 0 0 2px var(--red);}
+.vertical-text {writing-mode: vertical-lr; text-orientation: mixed;}
+.circle-badge {background: var(--white); border:3px solid var(--red); color: var(--black);}
+.btn-primary {background: var(--red); border:2px solid var(--red); color: var(--white); transition: all 0.3s ease;}
+.btn-primary:hover {background: transparent; color: var(--red); transform: translateY(-2px); box-shadow:0 10px 20px rgba(225,29,72,.35);}
+@media (max-width: 768px) { .vertical-text {writing-mode: horizontal-tb; text-orientation: mixed;} }
+
+/* ===== FLIP CARD ===== */
+.flip-scene {perspective:1200px;}
+.flip-card {position:relative;width:100%;height:100%;transform-style: preserve-3d; transition: transform 1s ease-in-out;}
+.flip-card.show-back {transform: rotateY(180deg);}
+.face {position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;}
+.face.back {transform: rotateY(180deg);}
+</style>
+</head>
+<body>
+<!-- FLIP CARD SCENE -->
+<div class="flip-scene relative w-full h-screen">
+  <div id="promoFlip" class="flip-card">
+    <!-- FRONT FACE -->
+    <div class="face front">
+      <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
+        <!-- Background Pulses -->
+        <div class="absolute inset-0 opacity-30">
+          <div class="absolute top-10 left-10 w-32 h-32 rounded-full bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.35),transparent_70%)] animate-pulse-custom delay-1"></div>
+          <div class="absolute bottom-20 right-20 w-24 h-24 rounded-full bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.28),transparent_70%)] animate-pulse-custom delay-3"></div>
+        </div>
+        <!-- MAIN GRID CONTENT -->
+        <div class="relative w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 h-full items-center">
+          <!-- LEFT SIDE -->
+          <div class="md:col-span-2 flex md:flex-col items-center justify-center">
+            <div class="vertical-text">
+              <h2 class="text-2xl md:text-4xl font-semibold tracking-[0.3em] text-red-500 animate-slide-left delay-1 drop-shadow-lg text-shadow">RESTAURANT</h2>
+              <p class="text-sm tracking-[0.2em] text-stone-300 mt-2 animate-slide-left delay-2 drop-shadow text-shadow">MENU</p>
+            </div>
+          </div>
+          <!-- CENTER -->
+          <div class="md:col-span-8 relative">
+            <div class="grid grid-cols-2 gap-4 mb-8">
+              <div class="image-frame animate-zoom-in delay-2 bg-black border-4 border-white/90 rounded-lg">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop" alt="Signature burger" class="w-full h-64 md:h-80 object-cover">
+              </div>
+              <div class="flex items-start justify-end animate-rotate-in delay-3">
+                <div class="circle-badge w-32 h-32 rounded-full flex items-center justify-center shadow-xl">
+                  <div class="text-center">
+                    <div class="text-sm font-bold text-red-600 mb-1">HOT</div>
+                    <div class="text-xs text-black">NEW MENU</div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-end">
+                <div class="animate-slide-bottom delay-4">
+                  <h1 class="serif text-4xl md:text-6xl font-bold text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.35)] text-shadow-strong mb-1">NEW MENU</h1>
+                  <div class="text-sm tracking-[0.25em] text-red-400 drop-shadow text-shadow">TASTE THE FIRE</div>
+                </div>
+              </div>
+              <div class="image-frame animate-zoom-in delay-5 bg-black border-4 border-white/90 rounded-lg">
+                <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1000&auto=format&fit=crop" alt="Wood-fired pizza" class="w-full h-48 object-cover">
+              </div>
+            </div>
+            <div class="text-center animate-slide-bottom delay-6">
+              <p class="text-stone-300 mb-4 drop-shadow text-shadow">Dine-in • Takeaway • Delivery</p>
+              <button class="btn-primary px-8 py-3 text-sm tracking-[0.15em] font-semibold uppercase">Order Now</button>
+              <p class="text-xs text-stone-400 mt-3 drop-shadow text-shadow">www.yourrestaurant.com</p>
+            </div>
+          </div>
+          <!-- RIGHT SIDE -->
+          <div class="md:col-span-2 flex items-center justify-center">
+            <div class="animate-fade-in delay-7">
+              <div class="w-1 h-32 bg-gradient-to-b from-red-500/80 to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK FACE -->
+    <div class="face back">
+      <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
+        <!-- Background Pulses -->
+        <div class="absolute inset-0 opacity-30">
+          <div class="absolute top-14 right-14 w-32 h-32 rounded-full bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.30),transparent_70%)] animate-pulse-custom delay-2"></div>
+          <div class="absolute bottom-16 left-16 w-24 h-24 rounded-full bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.25),transparent_70%)] animate-pulse-custom delay-4"></div>
+        </div>
+        <!-- Main Grid Content (back) -->
+        <div class="relative w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 h-full items-center">
+          <div class="md:col-span-2 flex md:flex-col items-center justify-center">
+            <div class="vertical-text">
+              <h2 class="text-2xl md:text-4xl font-semibold tracking-[0.3em] text-red-500 animate-slide-left delay-1 drop-shadow-lg text-shadow">RESTAURANT</h2>
+              <p class="text-sm tracking-[0.2em] text-stone-300 mt-2 animate-slide-left delay-2 drop-shadow text-shadow">SPECIALS</p>
+            </div>
+          </div>
+          <div class="md:col-span-8 relative">
+            <div class="grid grid-cols-2 gap-4 mb-8">
+              <div class="image-frame animate-zoom-in delay-2 bg-black border-4 border-white/90 rounded-lg">
+                <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1000&auto=format&fit=crop" alt="Sushi platter" class="w-full h-64 md:h-80 object-cover">
+              </div>
+              <div class="flex items-start justify-end animate-rotate-in delay-3">
+                <div class="circle-badge w-32 h-32 rounded-full flex items-center justify-center shadow-xl">
+                  <div class="text-center">
+                    <div class="text-sm font-bold text-red-600 mb-1">CHEF</div>
+                    <div class="text-xs text-black">SPECIAL</div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-end">
+                <div class="animate-slide-bottom delay-4">
+                  <h1 class="serif text-4xl md:text-6xl font-bold text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.35)] text-shadow-strong mb-1">WEEKEND FEAST</h1>
+                  <div class="text-sm tracking-[0.25em] text-red-400 drop-shadow text-shadow">SUSHI • PASTA • STEAK</div>
+                </div>
+              </div>
+              <div class="image-frame animate-zoom-in delay-5 bg-black border-4 border-white/90 rounded-lg">
+                <img src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cGFzdGF8ZW58MHx8MHx8fDA%3D" alt="Creamy pasta" class="w-full h-48 object-cover">
+              </div>
+            </div>
+            <div class="text-center animate-slide-bottom delay-6">
+              <p class="text-stone-300 mb-4 drop-shadow text-shadow">Happy Hours 4–6pm • Live Music Fri</p>
+              <button class="btn-primary px-8 py-3 text-sm tracking-[0.15em] font-semibold uppercase">Reserve Table</button>
+              <p class="text-xs text-stone-400 mt-3 drop-shadow text-shadow">www.yourrestaurant.com/specials</p>
+            </div>
+          </div>
+          <div class="md:col-span-2 flex items-center justify-center">
+            <div class="animate-fade-in delay-7">
+              <div class="w-1 h-32 bg-gradient-to-b from-red-500/80 to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Flip card animations
+function restartAnimationsIn(root) {
+  const elements = root.querySelectorAll('[class*="animate-"]');
+  elements.forEach(el => {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = null;
+  });
+}
+
+const flipCard = document.getElementById('promoFlip');
+let showingBack = false;
+setInterval(() => {
+  showingBack = !showingBack;
+  flipCard.classList.toggle('show-back', showingBack);
+  const face = flipCard.querySelector(showingBack ? '.face.back' : '.face.front');
+  if (face) restartAnimationsIn(face);
+}, 7000);
+
+// Image hover effect
+document.querySelectorAll('.image-frame img').forEach(img => {
+    img.addEventListener('mouseenter', () => {
+        img.style.transform = 'scale(1.1)';
+        img.style.transition = 'transform 0.5s ease';
+    });
+    img.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+    });
+});
+
+// Button click effect
+document.querySelectorAll('.btn-primary').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.currentTarget.style.transform = 'scale(0.95)';
+    setTimeout(() => { e.currentTarget.style.transform = 'scale(1)'; }, 150);
+  });
+});
+</script>
+</body>
+</html>

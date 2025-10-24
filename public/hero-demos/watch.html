@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Natural Organic Cosmetic Banner</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5;
+  }
+  .banner {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .banner-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 1s ease-in-out;
+    opacity: 0;
+  }
+  .banner-slide.active {
+    opacity: 1;
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+  .text-content {
+    color: #fff;
+    text-align: center;
+    z-index: 10;
+    padding: 1rem;
+  }
+  .text-content h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .text-content h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 6rem;
+    margin-bottom: 1rem;
+  }
+  .text-content p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .btn {
+    background-color: #fff;
+    color: #111;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: 0.3rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  @media (max-width: 768px) {
+    .text-content h1 { font-size: 4rem; }
+    .text-content h2 { font-size: 2rem; }
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s forwards;
+  }
+  .fade-up.delay-1 { animation-delay: 0.3s; }
+  .fade-up.delay-2 { animation-delay: 0.6s; }
+  .fade-up.delay-3 { animation-delay: 0.9s; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Video background */
+  .video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <!-- Slide 1 -->
+  <div class="banner-slide active" style="background-image:url('https://images.unsplash.com/photo-1622434641406-a158123450f9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdhdGNofGVufDB8fDB8fHww');">
+    <div class="overlay"></div>
+    <div class="text-content">
+      <h2 class="fade-up delay-1">Natural Organic</h2>
+      <h1 class="fade-up delay-2">Beauty Cosmetic</h1>
+      <p class="fade-up delay-3">Discount up to 50%</p>
+      <button class="btn fade-up delay-3">Order Now</button>
+    </div>
+  </div>
+
+  <!-- Slide 2 with video -->
+  <div class="banner-slide">
+    <video class="video-bg" autoplay muted loop playsinline>
+      <source src="https://cdn.pixabay.com/video/2020/04/03/34855-403777679_tiny.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="text-content">
+      <h2 class="fade-up delay-1">Premium Skincare</h2>
+      <h1 class="fade-up delay-2">Glow & Shine</h1>
+      <p class="fade-up delay-3">Save up to 40%</p>
+      <button class="btn fade-up delay-3">Shop Now</button>
+    </div>
+  </div>
+
+  <!-- Slide 3 with video -->
+  <div class="banner-slide">
+    <video class="video-bg" autoplay muted loop playsinline>
+      <source src="https://cdn.pixabay.com/video/2022/10/29/136967-765457958_tiny.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="text-content">
+      <h2 class="fade-up delay-1">Eco Friendly</h2>
+      <h1 class="fade-up delay-2">Natural Care</h1>
+      <p class="fade-up delay-3">Discount up to 30%</p>
+      <button class="btn fade-up delay-3">Buy Now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.banner-slide');
+  let currentSlide = 0;
+
+  function resetFadeUpAnimation(slide) {
+    const animatedElements = slide.querySelectorAll('.fade-up');
+    animatedElements.forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // trigger reflow
+      el.style.animation = '';
+    });
+  }
+
+  function nextSlide() {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+    resetFadeUpAnimation(slides[currentSlide]);
+  }
+
+  resetFadeUpAnimation(slides[currentSlide]);
+  setInterval(nextSlide, 5000);
+</script>
+
+</body>
+</html>

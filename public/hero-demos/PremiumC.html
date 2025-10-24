@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Fashion Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700;900&family=Raleway:wght@200;300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f0a 50%, #0d0605 100%);
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide.active .luxury-border {
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        .slide.active .season-label {
+            animation: labelFade 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+        }
+
+        .slide.active .main-title {
+            animation: titleReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+        }
+
+        .slide.active .collection-name {
+            animation: collectionSlide 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both;
+        }
+
+        .slide.active .product-frame {
+            animation: frameExpand 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+        }
+
+        .slide.active .limited-badge {
+            animation: badgeReveal 1.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s both;
+        }
+
+        .slide.active .cta-button {
+            animation: buttonElegant 1.2s cubic-bezier(0.4, 0, 0.2, 1) 1.3s both;
+        }
+
+        .slide.active .decorative-corner {
+            animation: cornerGrow 1s ease-out both;
+        }
+
+        .slide.active .decorative-corner.top-left {
+            animation-delay: 0.3s;
+        }
+
+        .slide.active .decorative-corner.top-right {
+            animation-delay: 0.5s;
+        }
+
+        .slide.active .decorative-corner.bottom-right {
+            animation-delay: 0.7s;
+        }
+
+        /* Background Effects */
+        .luxury-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .shimmer-effect {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(212, 175, 55, 0.03) 50%,
+                transparent 100%);
+            animation: shimmer 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        /* Layout */
+        .slide-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            z-index: 2;
+        }
+
+        /* Left Section */
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .season-label {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #d4af37;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .season-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, #d4af37 0%, transparent 100%);
+        }
+
+        .main-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(42px, 5.5vw, 72px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            line-height: 1;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+        }
+
+        .collection-name {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(24px, 3vw, 38px);
+            font-weight: 400;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+            letter-spacing: 2px;
+        }
+
+        .description {
+            font-size: clamp(15px, 1.3vw, 18px);
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.9;
+            max-width: 500px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .price {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(28px, 3vw, 42px);
+            font-weight: 700;
+            color: #d4af37;
+            letter-spacing: 2px;
+        }
+
+        .original-price {
+            font-size: clamp(18px, 2vw, 24px);
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: line-through;
+            font-weight: 300;
+        }
+
+        /* Right Section */
+        .right-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .luxury-border {
+            position: absolute;
+            inset: -20px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            z-index: 0;
+        }
+
+        .luxury-border::before {
+            content: '';
+            position: absolute;
+            inset: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 4px;
+        }
+
+        .product-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 420px;
+            background: linear-gradient(135deg, rgba(45, 30, 20, 0.8) 0%, rgba(20, 15, 10, 0.9) 100%);
+            border: 3px solid rgba(212, 175, 55, 0.4);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 30px 90px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(212, 175, 55, 0.2),
+                inset 0 0 80px rgba(212, 175, 55, 0.05);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-frame:hover {
+            transform: scale(1.03);
+        }
+
+        .product-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
+            z-index: 1;
+        }
+
+        .product-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.95) contrast(1.1) saturate(0.9);
+        }
+
+        /* Limited Badge   Footwear ResortC PremiumC.html*/
+        .limited-badge {
+            position: absolute;
+            bottom: 2px;
+            /* left: 20px; */
+            right: 20%;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: #1a0f0a;
+            padding: 14px 38px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transform: rotate(0deg);
+            box-shadow: 
+                0 15px 50px rgba(212, 175, 55, 0.5),
+                0 0 0 2px rgba(255, 255, 255, 0.1),
+                inset 0 2px 0 rgba(255, 255, 255, 0.5);
+            z-index: 3;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .limited-badge:hover {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background: transparent;
+            color: #d4af37;
+            padding: 15px 42px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border: 2px solid #d4af37;
+            border-radius: 0;
+            cursor: pointer;
+            width: fit-content;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.2),
+                inset 0 0 30px rgba(212, 175, 55, 0.05);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            transform: translateY(0);
+        }
+
+        .cta-button:hover {
+            color: #1a0f0a;
+            border-color: #f4d03f;
+            box-shadow: 
+                0 0 50px rgba(212, 175, 55, 0.4),
+                inset 0 0 40px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Decorative Corners */
+        .decorative-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .decorative-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-color: rgba(212, 175, 55, 0.4);
+            border-style: solid;
+            border-width: 0;
+        }
+
+        .decorative-corner.top-left {
+            top: 25px;
+            left: 25px;
+            border-top-width: 2px;
+            border-left-width: 2px;
+        }
+
+        .decorative-corner.top-right {
+            top: 25px;
+            right: 25px;
+            border-top-width: 2px;
+            border-right-width: 2px;
+        }
+
+        .decorative-corner.bottom-right {
+            bottom: 25px;
+            right: 25px;
+            border-bottom-width: 2px;
+            border-right-width: 2px;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.2);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .dot:hover {
+            transform: scale(1.4);
+            background: rgba(212, 175, 55, 0.4);
+        }
+
+        .dot.active {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            width: 45px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #d4af37;
+            font-size: 22px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(212, 175, 55, 0.3);
+            border-color: #f4d03f;
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .nav-arrow.prev { left: 25px; }
+        .nav-arrow.next { right: 25px; }
+
+        /* Animations */
+        @keyframes borderGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+            }
+        }
+
+        @keyframes labelFade {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes titleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+                filter: blur(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes collectionSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes frameExpand {
+            0% {
+                opacity: 0;
+                transform: scale(0.85);
+                filter: blur(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes badgeReveal {
+            0% {
+                opacity: 0;
+                transform: rotate(0deg) translateX(100px);
+            }
+            70% {
+                transform: rotate(0deg) translateX(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(0deg) translateX(0);
+            }
+        }
+
+        @keyframes buttonElegant {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cornerGrow {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            100% {
+                width: 80px;
+                height: 80px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .slide-content {
+                grid-template-columns: 1fr;
+                padding: 80px 40px 140px;
+                gap: 60px;
+            }
+
+            .left-section {
+                text-align: center;
+                align-items: center;
+            }
+
+            .season-label {
+                padding-left: 0;
+            }
+
+            .season-label::before {
+                display: none;
+            }
+
+            .description {
+                max-width: 100%;
+            }
+
+            .price-container {
+                justify-content: center;
+            }
+
+            .product-frame {
+                max-width: 450px;
+                height: 450px;
+            }
+
+            .limited-badge {
+                right: 50%;
+                transform: translateX(50%) rotate(0deg);
+            }
+
+            .limited-badge:hover {
+                transform: translateX(50%) rotate(0deg) scale(1.1);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .slide-content {
+                padding: 60px 24px 120px;
+            }
+
+            .product-frame {
+                max-width: 340px;
+                height: 340px;
+            }
+
+            .limited-badge {
+                padding: 15px 35px;
+                font-size: 14px;
+                bottom: 30px;
+            }
+
+            .cta-button {
+                padding: 18px 40px;
+                font-size: 14px;
+            }
+
+            .decorative-corner {
+                width: 50px;
+                height: 50px;
+            }
+
+            .decorative-corner.top-left {
+                top: 24px;
+                left: 24px;
+            }
+
+            .decorative-corner.top-right {
+                top: 24px;
+                right: 24px;
+            }
+
+            .decorative-corner.bottom-right {
+                bottom: 24px;
+                right: 24px;
+            }
+
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            .nav-arrow.prev { left: 20px; }
+            .nav-arrow.next { right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <div class="luxury-gradient"></div>
+        <div class="shimmer-effect"></div>
+        <div class="decorative-corners">
+            <div class="decorative-corner top-left"></div>
+            <div class="decorative-corner top-right"></div>
+            <div class="decorative-corner bottom-right"></div>
+        </div>
+
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <div class="slide-content">
+                <div class="left-section">
+                    <div class="season-label">Spring Collection 2025</div>
+                    <h1 class="main-title">LUXURY</h1>
+                    <h2 class="collection-name">Haute Couture</h2>
+                    <p class="description">Experience unparalleled elegance with our exclusive haute couture collection. Handcrafted perfection for the distinguished.</p>
+                    <div class="price-container">
+                        <div class="price">$2,499</div>
+                        <div class="original-price">$4,199</div>
+                    </div>
+                    <button class="cta-button">Discover Collection</button>
+                </div>
+
+                <div class="right-section">
+                    <div class="luxury-border"></div>
+                    <div class="product-frame">
+                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&h=600&fit=crop" alt="Luxury Fashion">
+                    </div>
+                    <div class="limited-badge" style="
+    right: auto;
+    left: auto;
+">Limited Edition</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="left-section">
+                    <div class="season-label">Signature Series 2025</div>
+                    <h1 class="main-title">ELEGANCE</h1>
+                    <h2 class="collection-name">Timeless Beauty</h2>
+                    <p class="description">Discover sophistication redefined. Each piece tells a story of exceptional craftsmanship and timeless design.</p>
+                    <div class="price-container">
+                        <div class="price">$3,299</div>
+                        <div class="original-price">$5,499</div>
+                    </div>
+                    <button class="cta-button">Explore Now</button>
+                </div>
+
+                <div class="right-section">
+                    <div class="luxury-border"></div>
+                    <div class="product-frame">
+                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&h=600&fit=crop" alt="Elegant Fashion">
+                    </div>
+                    <div class="limited-badge" style="
+    right: auto;
+    left: auto;
+">Exclusive Release</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="left-section">
+                    <div class="season-label">Premium Line 2025</div>
+                    <h1 class="main-title">PRESTIGE</h1>
+                    <h2 class="collection-name">Distinguished Style</h2>
+                    <p class="description">Embrace the extraordinary. A curated selection that embodies sophistication and refined taste for the elite.</p>
+                    <div class="price-container">
+                        <div class="price">$2,899</div>
+                        <div class="original-price">$4,799</div>
+                    </div>
+                    <button class="cta-button">View Collection</button>
+                </div>
+
+                <div class="right-section">
+                    <div class="luxury-border"></div>
+                    <div class="product-frame">
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=600&fit=crop" alt="Premium Fashion">
+                    </div>
+                    <div class="limited-badge"style="
+    right: auto;
+    left: auto;
+">Only 50 Pieces</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <button class="nav-arrow prev" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-arrow next" onclick="changeSlide(1)" aria-label="Next slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="nav-dots">
+            <span class="dot active" onclick="goToSlide(0)" aria-label="Slide 1"></span>
+            <span class="dot" onclick="goToSlide(1)" aria-label="Slide 2"></span>
+            <span class="dot" onclick="goToSlide(2)" aria-label="Slide 3"></span>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let autoSlideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (index >= slides.length) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = slides.length - 1;
+            } else {
+                currentSlide = index;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+            resetAutoSlide();
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            resetAutoSlide();
+        }
+
+        function autoSlide() {
+            changeSlide(1);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(autoSlide, 4000);
+        }
+
+        autoSlideInterval = setInterval(autoSlide, 4000);
+
+        document.querySelector('.banner-container').addEventListener('mouseenter', () => {
+            clearInterval(autoSlideInterval);
+        });
+
+        document.querySelector('.banner-container').addEventListener('mouseleave', () => {
+            resetAutoSlide();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+    </script>
+</body>
+</html>

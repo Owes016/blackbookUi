@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Premium Promo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; width: 100vw; height: 100vh; overflow: hidden; background: #0d0d0d; }
+
+        .banner-container { position: relative; width: 100%; height: 100vh; overflow: hidden; background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #000000 100%); }
+
+        .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1.5s cubic-bezier(0.4,0,0.2,1); }
+        .slide.active { opacity: 1; }
+        .slide.active .floating-hearts { animation: floatUp 15s linear infinite; }
+        .slide.active .main-title { animation: luxuryFadeIn 1.5s cubic-bezier(0.4,0,0.2,1) 0.3s both; }
+        .slide.active .subtitle { animation: elegantSlide 1.2s cubic-bezier(0.4,0,0.2,1) 0.6s both; }
+        .slide.active .discount-badge { animation: premiumPop 1.3s cubic-bezier(0.68,-0.55,0.265,1.55) 0.9s both; }
+        .slide.active .product-image { animation: smoothZoom 1.5s cubic-bezier(0.4,0,0.2,1) 0.5s both; }
+        .slide.active .cta-button { animation: luxuryBounce 1.2s cubic-bezier(0.68,-0.55,0.265,1.55) 1.2s both; }
+        .slide.active .decorative-circle { animation: rotateGlow 20s linear infinite; }
+
+        /* Background Effects */
+        .background-gradient { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle at 30% 50%, rgba(229,9,20,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(255,255,255,0.15) 0%, transparent 50%); z-index: 0; }
+        .floating-hearts { position: absolute; width: 100%; height: 200%; top: -100%; left: 0; z-index: 1; opacity: 0.15; }
+        .heart-particle { position: absolute; font-size: 24px; color: #e50914; animation: floatParticle 15s linear infinite; }
+
+        /* Layout */
+        .slide-content { position: relative; width: 100%; height: 100%; max-width: 1400px; margin: 0 auto; padding: 40px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; z-index: 2; }
+        .left-section { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 3; }
+        .brand-mark { width: 60px; height: 2px; background: linear-gradient(90deg, #e50914 0%, transparent 100%); margin-bottom: 10px; }
+        .main-title { font-family: 'Playfair Display', serif; font-size: clamp(36px, 5.5vw, 65px); font-weight: 900; background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 6px; line-height: 1.1; text-shadow: 0 0 40px rgba(229,9,20,0.6); position: relative; }
+        .subtitle { font-family: 'Playfair Display', serif; font-size: clamp(28px,4vw,48px); font-weight: 400; font-style: italic; color: #e50914; line-height: 1.3; text-shadow: 0 5px 20px rgba(229,9,20,0.5); }
+        .description { font-size: clamp(16px,1.5vw,20px); color: rgba(255,255,255,0.8); line-height: 1.8; max-width: 500px; font-weight: 300; letter-spacing: 0.5px; }
+
+        /* Right Section */
+        .right-section { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; }
+        .decorative-circle { position: absolute; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(229,9,20,0.15) 0%, transparent 70%); border: 2px solid rgba(229,9,20,0.3); z-index: 1; }
+        .decorative-circle::before { content: ''; position: absolute; inset: 40px; border-radius: 50%; border: 1px solid rgba(229,9,20,0.2); }
+        .product-image { width: 380px; height: 380px; border-radius: 50%; overflow: hidden; position: relative; z-index: 2; box-shadow: 0 0 80px rgba(229,9,20,0.4),0 30px 100px rgba(0,0,0,0.6), inset 0 0 60px rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.1); transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+        .product-image:hover { transform: scale(1.05) rotate(2deg); }
+        .product-image::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(229,9,20,0.2) 0%, transparent 100%); z-index: 1; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.1) contrast(1.05); }
+
+        /* Discount Badge */
+        .discount-badge { position: absolute; top: 5%; right: 0%; background: linear-gradient(135deg, #e50914 0%, #8b0000 100%); color: white; padding: 28px; width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; text-align: center; box-shadow: 0 15px 50px rgba(229,9,20,0.6),0 0 0 12px rgba(229,9,20,0.15), inset 0 0 30px rgba(255,255,255,0.25); z-index: 4; transition: transform 0.4s cubic-bezier(0.68,-0.55,0.265,1.55); animation: pulse 2s ease-in-out infinite; }
+        .discount-badge:hover { transform: scale(1.15) rotate(10deg); }
+        .discount-value { font-size: 38px; font-weight: 900; letter-spacing: -2px; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); }
+        .discount-label { font-size: 18px; font-weight: 700; letter-spacing: 2px; text-shadow: 1px 1px 5px rgba(0,0,0,0.3); }
+
+        /* CTA Button */
+        .cta-button { background: linear-gradient(135deg, #e50914 0%, #8b0000 100%); color: white; padding: 16px 45px; font-size: 16px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; border: none; border-radius: 50px; cursor: pointer; width: fit-content; box-shadow: 0 15px 50px rgba(229,9,20,0.5),0 0 0 1px rgba(255,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.3); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden; }
+        .cta-button::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%); transform: translateX(-100%); transition: transform 0.6s ease; }
+        .cta-button:hover::before { transform: translateX(100%); }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 20px 60px rgba(229,9,20,0.7),0 0 0 1px rgba(255,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.4); }
+
+        /* Navigation */
+        .nav-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .dot:hover { transform: scale(1.4); background: rgba(255,255,255,0.4); }
+        .dot.active { background: linear-gradient(135deg, #e50914 0%, #8b0000 100%); width: 45px; border-radius: 10px; box-shadow: 0 5px 20px rgba(229,9,20,0.6); }
+
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); color: white; font-size: 22px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .nav-arrow:hover { background: rgba(229,9,20,0.3); border-color: #e50914; transform: translateY(-50%) scale(1.15); box-shadow: 0 15px 40px rgba(229,9,20,0.5); }
+        .nav-arrow.prev { left: 25px; }
+        .nav-arrow.next { right: 25px; }
+
+        /* Animations */
+        @keyframes luxuryFadeIn { 0%{opacity:0;transform:translateY(40px);filter:blur(10px);}100%{opacity:1;transform:translateY(0);filter:blur(0);} }
+        @keyframes elegantSlide { 0%{opacity:0;transform:translateX(-60px);}100%{opacity:1;transform:translateX(0);} }
+        @keyframes premiumPop { 0%{opacity:0;transform:scale(0) rotate(-180deg);}60%{transform:scale(1.2) rotate(10deg);}100%{opacity:1;transform:scale(1) rotate(0deg);} }
+        @keyframes smoothZoom {0%{opacity:0;transform:scale(0.8);filter:blur(20px);}100%{opacity:1;transform:scale(1);filter:blur(0);} }
+        @keyframes luxuryBounce {0%{opacity:0;transform:translateY(60px) scale(0.8);}50%{transform:translateY(-10px) scale(1.05);}100%{opacity:1;transform:translateY(0) scale(1);} }
+        @keyframes rotateGlow {0%,100%{transform:rotate(0deg) scale(1);opacity:0.3;}50%{transform:rotate(180deg) scale(1.05);opacity:0.5;} }
+        @keyframes pulse {0%,100%{box-shadow:0 15px 50px rgba(229,9,20,0.5),0 0 0 15px rgba(229,9,20,0.1),inset 0 0 30px rgba(255,255,255,0.2);}50%{box-shadow:0 20px 60px rgba(229,9,20,0.7),0 0 0 20px rgba(229,9,20,0.15),inset 0 0 40px rgba(255,255,255,0.3);} }
+        @keyframes floatUp {0%{transform:translateY(0);}100%{transform:translateY(-100%);} }
+        @keyframes floatParticle {0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-100vh) translateX(50px) rotate(360deg);opacity:0;} }
+
+        /* Mobile Responsive */
+        @media (max-width:1024px){.slide-content{grid-template-columns:1fr;padding:80px 40px 140px;gap:60px;}.left-section{text-align:center;align-items:center;}.brand-mark{margin:0 auto 20px;}.description{max-width:100%;}.product-image{width:400px;height:400px;}.decorative-circle{width:450px;height:450px;}.discount-badge{width:130px;height:130px;padding:30px;} }
+        @media (max-width:640px){.slide-content{padding:60px 24px 120px;}.product-image{width:320px;height:320px;}.decorative-circle{width:350px;height:350px;}.discount-badge{width:110px;height:110px;padding:25px;}.discount-value{font-size:36px;}.discount-label{font-size:18px;}.cta-button{padding:18px 45px;font-size:16px;}.nav-arrow{width:50px;height:50px;font-size:18px;}.nav-arrow.prev{left:20px;}.nav-arrow.next{right:20px;} }
+    </style>
+</head>
+<body>
+<div class="banner-container">
+    <!-- Slide 1 -->
+    <div class="slide active">
+        <div class="background-gradient"></div>
+        <div class="floating-hearts" id="hearts"></div>
+        <div class="slide-content">
+            <div class="left-section">
+                <div class="brand-mark"></div>
+                <h1 class="main-title">Valentine's<br>Day</h1>
+                <h2 class="subtitle">Romantic Dinner</h2>
+                <p class="description">Indulge in an unforgettable evening crafted for lovers. Exquisite cuisine, elegant ambiance, and memories that last forever.</p>
+                <button class="cta-button">Reserve Your Table</button>
+            </div>
+            <div class="right-section">
+                <div class="decorative-circle"></div>
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRyaW5rfGVufDB8fDB8fHww" alt="Romantic Dinner">
+                </div>
+                <div class="discount-badge">
+                    <div class="discount-value">45%</div>
+                    <div class="discount-label">OFF</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="slide">
+        <div class="background-gradient"></div>
+        <div class="floating-hearts" id="hearts2"></div>
+        <div class="slide-content">
+            <div class="left-section">
+                <div class="brand-mark"></div>
+                <h1 class="main-title">Special<br>Night</h1>
+                <h2 class="subtitle">Candlelight Magic</h2>
+                <p class="description">Experience the magic of love with a curated selection of gourmet delights and candlelit ambience.</p>
+                <button class="cta-button">Book Now</button>
+            </div>
+            <div class="right-section">
+                <div class="decorative-circle"></div>
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGRpbm5lcnxlbnwwfHwwfHx8MA" alt="Candlelight">
+                </div>
+                <div class="discount-badge">
+                    <div class="discount-value">30%</div>
+                    <div class="discount-label">OFF</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <div class="nav-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+    </div>
+    <div class="nav-arrow prev"><i class="fa-solid fa-chevron-left"></i></div>
+    <div class="nav-arrow next"><i class="fa-solid fa-chevron-right"></i></div>
+</div>
+
+<script>
+    // Hearts generation
+    function createHearts(containerId){
+        const container=document.getElementById(containerId);
+        for(let i=0;i<20;i++){
+            const heart=document.createElement('div');
+            heart.className='heart-particle';
+            heart.style.left=Math.random()*100+'%';
+            heart.style.fontSize=(12+Math.random()*28)+'px';
+            heart.style.animationDuration=(10+Math.random()*15)+'s';
+            heart.innerHTML='❤';
+            container.appendChild(heart);
+        }
+    }
+    createHearts('hearts');
+    createHearts('hearts2');
+
+    // Slider
+    const slides=document.querySelectorAll('.slide');
+    const dots=document.querySelectorAll('.dot');
+    const prev=document.querySelector('.nav-arrow.prev');
+    const next=document.querySelector('.nav-arrow.next');
+    let current=0;
+
+    function showSlide(index){
+        slides.forEach((s,i)=>s.classList.toggle('active',i===index));
+        dots.forEach((d,i)=>d.classList.toggle('active',i===index));
+        current=index;
+    }
+
+    function nextSlide(){showSlide((current+1)%slides.length);}
+    function prevSlide(){showSlide((current-1+slides.length)%slides.length);}
+
+    next.addEventListener('click',nextSlide);
+    prev.addEventListener('click',prevSlide);
+    dots.forEach((dot,i)=>dot.addEventListener('click',()=>showSlide(i)));
+
+    setInterval(nextSlide,7000);
+</script>
+</body>
+</html>
+
+

@@ -23,8 +23,8 @@ export default function Page() {
             Hero Section Showcase
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            A curated gallery of hero section designs — clean, responsive, and
-            creative.
+            A curated gallery of hero section designs — clean, responsive, and Click on View Fullscreen to see each demo in its full creative.
+         
           </p>
         </header>
 

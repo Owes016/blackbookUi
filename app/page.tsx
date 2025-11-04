@@ -20,7 +20,7 @@ export default function Page() {
       <div className="max-w-7xl mx-auto space-y-[4.854rem]">
         <header className="text-center space-y-[1.618rem]">
           <h1 className="text-[3rem] md:text-[3.854rem] font-bold tracking-tight text-[#111]">
-            Hero Section Showcase
+          To Run Click On View Fullscreen 
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             A curated gallery of hero section designs — clean, responsive, and Click on View Fullscreen to see each demo in its full creative.
@@ -43,13 +43,21 @@ export default function Page() {
                   <h2 className="font-semibold text-[1.25rem] text-gray-800 capitalize">
                     {hero.title.replace(/[-_]/g, " ")}
                   </h2>
-                  <a
+                  {/* <a
                     href={`/hero-demos/${hero.file}`}
                     target="_blank"
                     className="text-[0.9rem] font-medium text-[#b8860b] hover:text-[#daa520] transition-colors"
                   >
                     View Fullscreen →
-                  </a>
+                  </a> */}
+                  <a
+  href={`/hero-demos/${hero.file}`}
+  target="_blank"
+  className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#b80b0b] text-white text-[1.5rem]  hover:bg-[#daa520] transition-colors"
+>
+  View Fullscreen →
+</a>
+
                 </div>
 
                 <iframe
